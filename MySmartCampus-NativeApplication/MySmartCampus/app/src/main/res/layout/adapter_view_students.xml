@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/activity_header_list"
+    android:weightSum="100">
+
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Name"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:id="@+id/name"
+        android:layout_weight="33.3"/>
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Index"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:id="@+id/index"
+        android:layout_weight="33.3"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33.3">
+
+        <TextView
+            android:gravity="center"
+            android:text="TagId"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/tagId"/>
+
+        <TextView
+            android:gravity="center"
+            android:text="Date"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/date"
+            android:layout_below="@+id/tagId"/>
+    </LinearLayout>
+
+</LinearLayout>

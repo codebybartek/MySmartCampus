@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/back_arrow"/>
+
+        <ImageView
+            android:id="@+id/toogle_btn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/calendar_toogle"
+            android:layout_marginBottom="20dp"/>
+
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/calendarActivities"
+            android:layout_width="300dp"
+            android:paddingRight="10dp"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="10dp"
+            android:layout_height="250dp"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextSize="12sp"
+            app:compactCalendarBackgroundColor="@color/colorAccent"
+            android:layout_below="@id/toogle_btn"
+            app:compactCalendarTextColor="#fff"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorCalendar"
+            app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+            app:compactCalendarMultiEventIndicatorColor="#fff"
+            />
+
+        <TextView
+            android:id="@+id/choseCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/chose_course"
+            android:layout_below="@id/calendarActivities"
+            android:textSize="20sp"
+            tools:ignore="MissingConstraints" />
+
+        <Spinner
+            android:id="@+id/spinnerActivities"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/select_input"
+            android:backgroundTintMode="add"
+            android:layout_below="@id/choseCourse"
+            android:gravity="center_horizontal"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:spinnerMode="dropdown" />
+
+
+        <LinearLayout
+            android:id="@+id/activity_header_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0e0ed7"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/spinnerActivities"
+            android:weightSum="100">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Activity title"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@+id/date"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Activity duration"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Activity Date/hour"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/activitiesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/activity_header_list"
+            android:weightSum="100">
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="460dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+    </RelativeLayout>
+

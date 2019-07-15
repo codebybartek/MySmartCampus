@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+            <LinearLayout
+                android:id="@+id/exam_header_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0e0ed7"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Exam title:"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/date"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Exam date: "
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Grade/Student index"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/examsList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/exam_header_list"
+                android:weightSum="100">
+                <ListView
+                    android:id="@+id/listViewExams"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/seeMoreExams"
+                style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/simple_button"
+                android:backgroundTint="@color/colorAccent"
+                android:layout_centerInParent="true"
+                android:text="All exams >"
+                android:layout_below="@id/examsList"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/activity_header_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0e0ed7"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_below="@id/seeMoreExams"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Activity title"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/date"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Activity duration"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Activity Date/hour"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/activitiesList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/activity_header_list"
+                android:weightSum="100">
+                <ListView
+                    android:id="@+id/listViewActivities"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/seeMoreActivities"
+                style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/simple_button"
+                android:backgroundTint="@color/colorAccent"
+                android:layout_centerInParent="true"
+                android:text="All activities >"
+                android:layout_below="@id/activitiesList"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/materials_header_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#0e0ed7"
+                android:orientation="horizontal"
+                android:layout_below="@id/seeMoreActivities"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="Materials: "
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/materialsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/materials_header_list"
+                android:weightSum="100">
+                <ListView
+                    android:id="@+id/listViewMaterials"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/seeMoreMaterials"
+                style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/simple_button"
+                android:backgroundTint="@color/colorAccent"
+                android:layout_centerInParent="true"
+                android:text="All materials >"
+                android:layout_below="@id/materialsList"/>
+
+            <LinearLayout
+                android:id="@+id/news_header_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#0e0ed7"
+                android:orientation="horizontal"
+                android:layout_below="@id/seeMoreMaterials"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="33.3"
+                    android:gravity="center"
+                    android:text="News: "
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/newsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/news_header_list"
+                android:layout_marginTop="30dp"
+                android:weightSum="100">
+                <ListView
+                    android:id="@+id/listViewNews"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+            <Button
+                android:id="@+id/seeMoreNews"
+                style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/simple_button"
+                android:backgroundTint="@color/colorAccent"
+                android:layout_centerInParent="true"
+                android:text="All news >"
+                android:layout_below="@id/newsList"/>
+
+
+    </RelativeLayout>
+
+</ScrollView>

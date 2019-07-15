@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <Button
+        android:id="@+id/backBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/back_arrow"/>
+
+        <LinearLayout
+            android:id="@+id/header_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#0e0ed7"
+            android:orientation="horizontal"
+            android:layout_marginTop="50dp"
+            android:weightSum="100">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Name:"
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@+id/date"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Index: "
+                android:textColor="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="33.3"
+                android:gravity="center"
+                android:text="Card ID/Date"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/attendanceList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_list"
+            android:weightSum="100">
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="360dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/saveList"
+            style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/simple_button"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_centerInParent="true"
+            android:text="Save list"
+            android:layout_below="@id/attendanceList"
+            android:textStyle="bold" />
+
+    </RelativeLayout>

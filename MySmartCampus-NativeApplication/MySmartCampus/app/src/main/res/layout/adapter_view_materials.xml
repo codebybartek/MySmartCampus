@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/header_list"
+    android:background="@android:color/transparent"
+    android:backgroundTint="@android:color/transparent"
+    android:orientation="horizontal"
+    android:padding="0dp"
+    android:weightSum="100">
+
+    <TextView
+        android:id="@+id/materialTitle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="50"
+        android:gravity="center"
+        android:text="Materials links:"
+        android:textSize="22sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/materialDate"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="50"
+        android:gravity="center"
+        android:text="Materials dates:"
+        android:textAlignment="center" />
+
+</LinearLayout>
