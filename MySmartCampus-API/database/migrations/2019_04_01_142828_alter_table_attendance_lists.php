@@ -14,16 +14,16 @@ class AlterTableAttendanceLists extends Migration
     public function up()
     {
         Schema::table('attendance_lists', function (Blueprint $table) {
-            $table->integer('student_id')
+            $table->integer('user_id')
                 ->unsigned();
             $table->integer('activity_id')
                 ->unsigned();
-            $table->foreign('student_id')
-                ->references('student_id')
-                ->on('students')
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
             $table->foreign('activity_id')
-                ->references('activity_id')
+                ->references('id')
                 ->on('activities')
                 ->onDelete('cascade');
         });
@@ -36,6 +36,6 @@ class AlterTableAttendanceLists extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('attendance_lists');
     }
 }

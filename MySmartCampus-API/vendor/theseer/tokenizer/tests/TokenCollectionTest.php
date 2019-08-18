@@ -11,7 +11,7 @@ class TokenCollectionTest extends TestCase {
     /** @var  TokenCollection */
     private $collection;
 
-    protected function setUp(): void {
+    protected function setUp() {
         $this->collection = new TokenCollection();
     }
 
@@ -33,7 +33,7 @@ class TokenCollectionTest extends TestCase {
         $this->collection->addToken($token);
 
         foreach($this->collection as $position => $current) {
-            $this->assertIsInt($position);
+            $this->assertInternalType('integer', $position);
             $this->assertSame($token, $current);
         }
     }

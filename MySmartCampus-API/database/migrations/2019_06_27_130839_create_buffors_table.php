@@ -14,7 +14,7 @@ class CreateBufforsTable extends Migration
     public function up()
     {
         Schema::create('buffors', function (Blueprint $table) {
-            $table->increments('id_buffor');
+            $table->increments('id');
             $table->string('table_name');
             $table->integer('id_in_table');
             $table->dateTime('date_create');

@@ -46,15 +46,19 @@ class Activities extends JsonResource
             $students_All[$id]['groupId'] = $student->pluck('group_id');
         }*/
 
+        $activity = Activity::all()->where('id', $this->id)->first();
+
         return [
-            'id' => $this->activity_id,
+            'id' => $this->id,
             'activityDate' => $this->activityDate,
             'title' => $this->title,
             'duration' => $this->duration,
-            'recurrence_id' => $this->recurrence_id,
+            'hash' => $this->hash,
+            'class_room' => $this->class_room,
+            'checked' => $this->checked,
+            'materials' => $activity->materials,
+            'exams' => $activity->exams,
             'students' => $students,
-            'course' => Course::all()->where('course_id', $this->course_id)->first(),
-            'checked' => $this->checked
         ];
     }
 }

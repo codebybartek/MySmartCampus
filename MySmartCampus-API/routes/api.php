@@ -1,46 +1,46 @@
 <?php
 
+use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-Route::group([
-    'prefix' => 'professors'
-], function () {
-    Route::group([
-        'middleware' => ['api', 'auth:api_prof']
-    ], function () {
-        Route::resource('courses', 'professorController\CoursesController');
-        Route::resource('groups', 'professorController\GroupsController');
-        Route::resource('activities', 'professorController\ActivitiesController');
-        Route::resource('students', 'professorController\StudentsController');
-        Route::resource('recurrences', 'professorController\RecurrenceController');
-        Route::resource('attandancelist', 'professorController\AttandanceListController');
-        Route::resource('activitiesfree', 'professorController\ActivitiesFreeController');
-        Route::resource('professors', 'professorController\ProfessorsAdminController');
-        Route::resource('subjects', 'professorController\SubjectsController');
-        Route::resource('studentsgroup', 'professorController\StudentsGroupController');
-        Route::resource('news', 'professorController\NewsController');
-        Route::resource('materials', 'professorController\MaterialsController');
-        Route::resource('grades', 'professorController\GradesController');
-        Route::resource('exams', 'professorController\ExamsController');
-    });
-    Route::post('login', 'professorController\ProfessorsController@login');
 
+Route::post('role', 'JwtAuthenticateController@createRole');
+Route::post('permission', 'JwtAuthenticateController@createPermission');
+Route::post('assign-role', 'JwtAuthenticateController@assignRole');
+Route::post('attach-permission', 'JwtAuthenticateController@attachPermission');
+
+
+Route::group(['middleware' => ['ability:professor']], function()
+{
+    Route::resource('courses', 'CoursesController');
+    Route::resource('groups', 'GroupsController');
+    Route::resource('activities', 'ActivitiesController');
+    Route::resource('students', 'StudentsController');
+    Route::resource('recurrences', 'RecurrenceController');
+    Route::resource('attandancelist', 'AttandanceListController');
+    Route::resource('activitiesfree', 'ActivitiesFreeController');
+    Route::resource('professors', 'ProfessorsAdminController');
+    Route::resource('subjects', 'SubjectsController');
+    Route::resource('studentsgroup', 'StudentsGroupController');
+    Route::resource('news', 'NewsController');
+    Route::resource('materials', 'MaterialsController');
+    Route::resource('grades', 'GradesController');
+    Route::resource('exams', 'ExamsController');
+    Route::resource('home', 'HomeController');
+    Route::get('user', 'JwtAuthenticateController@index');
 });
-Route::group([
-    'prefix' => 'students'
-], function () {
-    Route::group([
-        'middleware' => ['api', 'auth:api_stud']
-    ], function () {
-        Route::resource('grades', 'professorController\GradesController');
-        Route::resource('subjects', 'studentController\SubjectsController');
-    });
-    Route::post('login', 'studentController\StudentsController@login');
-});
 
-
-Route::post('loginMobileApp', 'professorController\ProfessorsController@loginMobileApp');
-
+// Authentication route
+Route::post('login', 'JwtAuthenticateController@authenticate');
 
 

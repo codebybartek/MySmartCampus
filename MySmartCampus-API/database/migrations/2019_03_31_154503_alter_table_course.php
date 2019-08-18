@@ -16,15 +16,9 @@ class AlterTableCourse extends Migration
         Schema::table('courses', function (Blueprint $table) {
             $table->integer('group_id')
                 ->unsigned();
-            $table->integer('subject_id')
-                ->unsigned();
             $table->foreign('group_id')
-                ->references('group_id')
+                ->references('id')
                 ->on('groups')
-                ->onDelete('cascade');
-            $table->foreign('subject_id')
-                ->references('subject_id')
-                ->on('subjects')
                 ->onDelete('cascade');
         });
     }
@@ -36,6 +30,6 @@ class AlterTableCourse extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('courses');
     }
 }

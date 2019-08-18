@@ -14,11 +14,12 @@ class CreateMaterialsTable extends Migration
     public function up()
     {
         Schema::create('materials', function (Blueprint $table) {
-            $table->increments('material_id');
+            $table->increments('id');
             $table->string('title');
             $table->string("content");
             $table->dateTime('material_date');
             $table->string("attachment_url");
+            $table->string('hash');
             $table->timestamps();
         });
     }

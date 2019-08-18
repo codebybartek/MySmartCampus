@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    protected $fillable = ['title', 'content', 'news_date', 'duration', 'img_src', 'course_id'];
-    public $primaryKey = 'news_id';
+    protected $fillable = ['title', 'content', 'news_date', 'img_src', 'hash'];
+    public $primaryKey = 'id';
+
+    protected $hidden = ['pivot'];
 }

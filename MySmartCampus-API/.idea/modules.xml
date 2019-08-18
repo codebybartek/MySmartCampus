@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/MyBulletin.iml" filepath="$PROJECT_DIR$/.idea/MyBulletin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/MySmartCampus-API.iml" filepath="$PROJECT_DIR$/.idea/MySmartCampus-API.iml" />
     </modules>
   </component>
 </project>

@@ -14,7 +14,7 @@ class CreateAttendanceListsTable extends Migration
     public function up()
     {
         Schema::create('attendance_lists', function (Blueprint $table) {
-            $table->increments('attendance_lists_id');
+            $table->increments('id');
             $table->dateTime('data_presence');
             $table->timestamps();
         });

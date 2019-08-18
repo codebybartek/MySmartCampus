@@ -14,12 +14,13 @@ class CreateActivitiesTable extends Migration
     public function up()
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->increments('activity_id');
+            $table->increments('id');
             $table->string('title');
             $table->dateTime('activityDate');
             $table->integer('duration');
             $table->string('class_room');
-            $table->boolean('checked');
+            $table->boolean('checked')->nullable();
+            $table->string('hash');
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ class CreateActivitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exercises');
+        Schema::dropIfExists('activities');
     }
 }

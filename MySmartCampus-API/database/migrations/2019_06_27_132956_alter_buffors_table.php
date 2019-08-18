@@ -14,11 +14,11 @@ class AlterBufforsTable extends Migration
     public function up()
     {
         Schema::table('buffors', function (Blueprint $table) {
-            $table->integer('professor_id')
+            $table->integer('user_id')
                 ->unsigned();
-            $table->foreign('professor_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('professors')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
@@ -30,6 +30,6 @@ class AlterBufforsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('buffors');
     }
 }

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {
-    protected $fillable = ['title', 'questions', 'exam_date', 'isQuiz', 'duration', 'course_id'];
-    public $primaryKey = 'exam_id';
+    protected $fillable = ['title', 'questions', 'exam_date', 'isQuiz', 'duration', 'hash'];
+
+    public $primaryKey = 'id';
+
+    protected $hidden = ['pivot'];
 }

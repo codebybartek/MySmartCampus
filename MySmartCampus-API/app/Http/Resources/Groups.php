@@ -2,15 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\Courses as CoursesResource;
-use App\Professor;
-use App\Student;
-use App\Subject;
-use App\Course;
+
+use App\Group;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\StudentsGroup;
-use App\Http\Resources\StudentsGroups as StudentsGroupsResource;
 use PhpParser\Node\Expr\Array_;
+use function Sodium\add;
 
 class Groups extends JsonResource
 {
@@ -22,8 +18,23 @@ class Groups extends JsonResource
      */
     public function toArray($request)
     {
-        $subjectId = Course::all()->where('group_id', $this->group_id)->pluck('subject_id');
-        $g = 0;
+        $users = Group::all()->where('id', $this->id)->first()->users;
+
+        $students = [];
+        $professors = [];
+        $s = 0;
+        $p = 0;
+        for($i=0; $i<count($users); $i++){
+            if($users->get($i)->role->first()->name == "user"){
+                $students[$s] = $users->get($i);
+                $s++;
+            }else if($users->get($i)->role->first()->name == "professor"){
+                $professors[$s] = $users->get($i);
+                $p++;
+            }
+        }
+
+        /*$g = 0;
         $professor_ids = array();
         for($i=0; $i<count($subjectId); $i++) {
             $professor_ids[$g] = Subject::all()->where('subject_id', $subjectId[$i])->pluck("professor_id")->first();
@@ -36,12 +47,13 @@ class Groups extends JsonResource
             $professors[$id]['name'] = $professor->pluck('name');
         }
         $studentsGroup = StudentsGroup::all()->where('group_id', $this->group_id);
-        $students = StudentsGroupsResource::collection($studentsGroup);
+        $students = StudentsGroupsResource::collection($studentsGroup);*/
+
         return [
             'id' => $this->group_id,
             'name' => $this->name,
-            'professor' =>  $professors,
-            'students' => $students
+            'students' => $students,
+            'professor' => $professors[0]
         ];
     }
 }

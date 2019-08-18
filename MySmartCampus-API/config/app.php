@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'Europe/Warsaw',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -165,9 +165,9 @@ return [
         /*
          * Package Service Providers...
          */
-
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Zizaco\Entrust\EntrustServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,7 +229,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class
+
     ],
 
 ];

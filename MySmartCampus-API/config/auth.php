@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api_prof',
-        'passwords' => 'api_prof',
+        'guard' => 'web',
+        'passwords' => 'users',
     ],
 
     /*
@@ -36,14 +36,15 @@ return [
     */
 
     'guards' => [
-        'api_prof' => [
-            'driver' => 'jwt',
-            'provider' => 'professors',
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
         ],
 
-        'api_stud' => [
-            'driver' => 'jwt',
-            'provider' => 'students',
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
         ],
     ],
 
@@ -65,15 +66,15 @@ return [
     */
 
     'providers' => [
-        'professors' => [
+        'users' => [
             'driver' => 'eloquent',
-            'model' => App\Professor::class,
-        ],
-        'students' => [
-            'driver' => 'eloquent',
-            'model' => App\Student::class,
+            'model' => App\User::class,
         ],
 
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*
@@ -92,13 +93,8 @@ return [
     */
 
     'passwords' => [
-        'api_prof' => [
-            'provider' => 'api_prof',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
-        'api_stud' => [
-            'provider' => 'api_stud',
+        'users' => [
+            'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
         ],

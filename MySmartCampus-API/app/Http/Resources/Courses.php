@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Activity;
+use App\Course;
 use App\Material;
 use App\Exam;
 use App\News;
@@ -21,17 +22,14 @@ class Courses extends JsonResource
      */
     public function toArray($request)
     {
-        $materials = Material::all()->where('course_id', $this->course_id);
-        $news = News::all()->where('course_id', $this->course_id);
-        $exams = Exam::all()->where('course_id', $this->course_id);
+        $course = Course::all()->where('id', $this->id)->first();
+
         return [
-            'id' => $this->course_id,
+            'id' => $this->id,
             'name' => $this->name,
-            'group' => Group::all()->where('group_id', $this->group_id)->toArray(),
-            'activities' => Activity::all()->where('course_id', $this->course_id)->toArray(),
-            'materials' => $materials,
-            'news' => $news,
-            'exams' => ExamResources::collection($exams)
+            'group' => Group::all()->where('id', $this->group_id),
+            'activities' => $course->activities,
+            'news' => $course->news
         ];
     }
 }

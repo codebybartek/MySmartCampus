@@ -14,16 +14,16 @@ class AlterGradesTable extends Migration
     public function up()
     {
         Schema::table('grades', function (Blueprint $table) {
-            $table->integer('student_id')
+            $table->integer('user_id')
                 ->unsigned();
             $table->integer('exam_id')
                 ->unsigned();
-            $table->foreign('student_id')
-                ->references('student_id')
-                ->on('students')
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
             $table->foreign('exam_id')
-                ->references('exam_id')
+                ->references('id')
                 ->on('exams')
                 ->onDelete('cascade');
         });
@@ -36,6 +36,6 @@ class AlterGradesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('grades');
     }
 }
