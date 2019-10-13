@@ -23,10 +23,11 @@ class Materials extends JsonResource
         $activities = [];
 
         for($i = 0; $i < count($course->activities); $i++){
-            $activities[$i]['materials'] = $course->activities->get($i)->first()->materials;
+            $activities[$i]['materials'] = $course->activities->get($i)->materials;
             $activities[$i]['activity_id'] = $course->activities->get($i)->id;
             $activities[$i]['activity_title'] = $course->activities->get($i)->title;
             $activities[$i]['activity_date'] = $course->activities->get($i)->activityDate;
+            $activities[$i]['activity_hash'] = $course->activities->get($i)->hash;
         }
 
         return [

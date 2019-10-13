@@ -1,7 +1,8 @@
 <template>
   <div id="app">
+    <b-alert v-if="alert" show dismissible fade v-bind:variant="alert.alertClass" :key="new Date().getTime()">{{alert.content}}</b-alert>
     <NavbarComponent v-if="showNavbar" />
-    <router-view v-on:toggleNavbar="toggleNavbar()" />
+    <router-view @toggleNavbar="toggleNavbar()" @setAlert="setAlert"/>
     <FooterComponent v-if="showNavbar" />
   </div>
 </template>
@@ -20,11 +21,16 @@ export default {
   data () {
     return {
       showNavbar: true,
+      alert: null
     }
   },
   methods: {
     toggleNavbar(){
       this.showNavbar = !this.showNavbar;
+    },
+    setAlert(alert_param){
+    console.log(alert_param);
+      this.alert = alert_param;
     }
   }
 }
@@ -33,6 +39,37 @@ export default {
 <style lang="scss">
 
 @import 'styles/variables.scss';
+
+body{
+  background-color: $dark_grey;
+}
+
+.popup{
+  position: absolute;
+  top: 100px;
+  right: 0;
+  left: 0;
+  transform: scale(0);
+  transition: $standart_transition;
+}
+.show_pop{
+  transform: scale(1);
+}
+
+.alert{
+  position: fixed;
+  bottom: 0;
+  z-index: 999;
+}
+.custom-padding{
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.custom-padding-60{
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
 #app {
   font-family: 'Cormorant', serif;
   -webkit-font-smoothing: antialiased;
@@ -67,6 +104,20 @@ h1,h2,h3,h4,h5,h6{
 
 img{
   max-width: 100%;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #fff;
+  opacity: 1; /* Firefox */
+  font-weight: 300;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #fff;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #fff;
 }
 
 a:hover, a:active, a:focus{
@@ -182,6 +233,7 @@ select:-webkit-autofill:focus {
   position: absolute;
   bottom: 0;
   margin: 0 auto;
+  text-align: center;
   font-size: 1.2em!important;
   margin-bottom: 0!important;
   width: 158px;
@@ -224,11 +276,131 @@ select:-webkit-autofill:focus {
   transform: scale(0);
   transition: $standart_transition;
 }
-.show_single_content{
+
+.show_single_content, .show_add_form_content{
   transform: scale(1)!important;
 }
 
-@media(max-width: 992px){
+.navigation_buttons{
+
+  margin-top: 30px;
+
+  i{
+    margin-left: 5px;
+  }
+}
+
+.single_content{
+  form{
+    input, textarea{
+      background: transparent;
+      border: 1px solid $basic_color;
+      padding: 5px;
+      color: $basic_color!important;
+    }
+    select{
+      background: transparent;
+      border: 1px solid $basic_color;
+      padding: 7.1px;
+      color: $basic_color!important;
+    }
+    select option[disabled] { color: #fff;}
+
+
+    option{
+        color: $basic_grey!important;
+      }
+  }
+}
+
+.add_button{
+  border: 2px solid $basic_color;
+  color: $basic_color;
+  padding: 4px 25px;
+  display: inline-block;
+  background: transparent;
+  text-transform: uppercase;
+  margin: 0 10px;
+
+  &:hover{
+    border-color: $basic_green;
+    color: $basic_green;
+  }
+}
+
+.carousel-3d-slide {
+  background: $light_grey;
+  opacity: 0.5!important;
+  border: none;
+
+  .course{
+    padding: 15px;
+    text-align: center;
+
+    h2{
+      color: $dark_grey;
+      text-align: center;
+    }
+
+    h4{
+      color: $basic_blue;
+    }
+
+    .more{
+      color: $basic_green;
+
+      &:hover{
+
+        i{
+          margin-right: -10px!important;
+          margin-left: 10px!important;
+        }
+      }
+    }
+
+    a{
+      color: $basic_color;
+      margin-bottom: 5px;
+      display: inline-block;
+      transition: $standart_transition;
+      font-size: 0.9em;
+
+      span{
+        color: $basic_green;
+        transition: $standart_transition;
+      }
+
+      &:hover{
+        color: $basic_blue;
+
+        span{
+          color: $basic_blue;
+        }
+      }
+    }
+  }
+
+}
+.current{
+  background: $light_grey;
+  opacity: 1!important;
+}
+
+
+@media screen and (min-width: 1700px){
+  .w100, .container-fluid{
+    max-width: 1700px;
+    position: relative;
+    margin: 0 auto;
+  }
+  .fixed_img{
+    bottom: 0!important;
+    top: auto!important;
+
+  }
+}
+
+@media screen and (max-width: 992px){
 
 .news_slider .carousel-3d-slider{
   width: 70%!important;
@@ -237,7 +409,7 @@ select:-webkit-autofill:focus {
 }
 
 
-@media(max-width: 767px){
+@media screen and (max-width: 767px){
 
 .table th, .table td{
   padding: 0!important;

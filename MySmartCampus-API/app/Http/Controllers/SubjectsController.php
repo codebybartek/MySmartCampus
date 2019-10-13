@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Subject;
 use App\Course;
 use App\Http\Resources\Subjects as SubjectResource;
-use App\Http\Resources\Courses as CoursesResource;
+use App\Http\Resources\Subjects as SubjectsResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SubjectsController extends Controller
 {
@@ -41,35 +42,34 @@ class SubjectsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Subject::create($request->all());
+        $subject = new Subject();
+        $subject->name = $request->name;
+        $subject->hash = md5(time()).rand(0, 999);
 
-            return response()->json([
-                'created' => 'Subject was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        Subject::create($subject->toArray());
+
+        $user = Auth::user();
+        $subjectId = Subject::all()->where('hash', $subject->hash)->pluck('id')->first();
+
+        DB::table('course_user')->insert(
+            ['user_id' => $user->id, 'course_id' => null, 'subject_id' => $subjectId]
+        );
+
+        return response()->json([
+            'created' => 'Subject was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Course::all()->where('subject_id', $id);
-            return CoursesResource::collection($course);
-        }else{
-            return "unauthorized";
-        }
+        $subject = Subject::all()->where('hash', $hash);
+        return SubjectsResource::collection($subject);
     }
 
     /**
@@ -121,17 +121,11 @@ class SubjectsController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $subject = Subject::where('subject_id', $id);
-            $subject->delete();
+        $subject = Subject::where('id', $id);
+        $subject->delete();
 
-            return response()->json([
-                'deleted' => 'Subject was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        return response()->json([
+            'deleted' => 'Subject was deleted'
+        ], 200);
     }
 }

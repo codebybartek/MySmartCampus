@@ -9,6 +9,7 @@ use App\Subject;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CoursesController extends Controller
 {
@@ -42,35 +43,35 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Course::create($request->all());
+        $course = new Course();
+        $course->name = $request->name;
+        $course->group_id = $request->group_id;
+        $course->hash = md5(time()).rand(0, 999);
 
-            return response()->json([
-                'created' => 'Course was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        Course::create($course->toArray());
+
+        $user = Auth::user();
+        $courseId = Course::all()->where('hash', $course->hash)->pluck('id')->first();
+
+        DB::table('course_user')->insert(
+            ['user_id' => $user->id, 'course_id' => $courseId, 'subject_id' => $request->subject_id]
+        );
+
+        return response()->json([
+            'created' => 'Course was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  String  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Course::all()->where('course_id', $id);
-            return CoursesResource::collection($course);
-        }else{
-            return "unauthorized";
-        }
+        $course = Course::all()->where('hash', $hash);
+        return CoursesResource::collection($course);
     }
 
     /**

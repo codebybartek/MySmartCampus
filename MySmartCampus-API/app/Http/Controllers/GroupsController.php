@@ -57,19 +57,13 @@ class GroupsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  String  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $groups = Group::all()->where('group_id', $id);
-            return GroupsResource::collection($groups);
-        }else{
-            return "unauthorized";
-        }
+        $groups = Group::all()->where('hash', $hash);
+        return GroupsResource::collection($groups);
     }
 
     /**

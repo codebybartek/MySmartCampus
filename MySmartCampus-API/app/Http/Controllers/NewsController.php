@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Course;
 use App\News;
-use App\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\News as NewsResources;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
@@ -55,35 +54,39 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            News::create($request->all());
+        $imageName = $request->image->getClientOriginalName();
+        $request->image->move(public_path('images'), $imageName);
 
-            return response()->json([
-                'created' => 'News was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $news = new News();
+        $news->title = $request->title;
+        $news->content = $request->body;
+        $news->img_src = 'http://'.request()->getHost().':8000/images/'.$imageName;
+        $news->news_date = date('Y-m-d H:i:s');
+        $news->hash = md5(time()).rand(0, 999);
+
+        News::create($news->toArray());
+
+        $newsId = News::all()->where('hash', $news->hash)->pluck('id')->first();
+
+        DB::table('course_news')->insert(
+            ['course_id' => $request->course_id, 'news_id' => $newsId]
+        );
+
+        return response()->json([
+            'created' => 'News was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $news = News::all()->where('news_id', $id);
-            return $news;
-        }else{
-            return "unauthorized";
-        }
+        $news = News::all()->where('hash', $hash);
+        return NewsResources::collection($news);
     }
 
     /**
@@ -141,17 +144,11 @@ class NewsController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $news = News::where('news_id', $id);
-            $news->delete();
+        $news = News::where('id', $id);
+        $news->delete();
 
-            return response()->json([
-                'deleted' => 'News was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        return response()->json([
+            'deleted' => 'News was deleted'
+        ], 200);
     }
 }

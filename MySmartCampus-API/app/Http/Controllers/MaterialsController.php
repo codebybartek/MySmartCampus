@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Resources\Materials as MaterialResources;
+use Illuminate\Support\Facades\DB;
 
 class MaterialsController extends Controller
 {
@@ -43,35 +44,39 @@ class MaterialsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Material::create($request->all());
+        $attachmentName = $request->attachment->getClientOriginalName();
+        $request->attachment->move(public_path('materials'), $attachmentName);
 
-            return response()->json([
-                'created' => 'Material was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $material = new Material();
+        $material->title = $request->title;
+        $material->content = $request->body;
+        $material->attachment_url = 'http://'.request()->getHost().':8000/images/'.$attachmentName;
+        $material->material_date = date('Y-m-d H:i:s');
+        $material->hash = md5(time()).rand(0, 999);
+
+        Material::create($material->toArray());
+
+        $materialId = Material::all()->where('hash', $material->hash)->pluck('id')->first();
+
+        DB::table('activity_material')->insert(
+            ['activity_id' => $request->activity_id, 'material_id' => $materialId]
+        );
+
+        return response()->json([
+            'created' => 'Material was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $material = Material::all()->where('material_id', $id);
-            return $material;
-        }else{
-            return "unauthorized";
-        }
+        $material = Material::all()->where('hash', $hash)->first();
+        return $material;
     }
 
     /**
@@ -128,17 +133,13 @@ class MaterialsController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $material = Material::where('material_id', $id);
-            $material->delete();
+        $material = Material::where('id', $id);
+        $material->delete();
 
-            return response()->json([
-                'deleted' => 'Material was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        DB::table('activity_material')->where('material_id', $id)->delete();
+
+        return response()->json([
+            'deleted' => 'Material was deleted'
+        ], 200);
     }
 }

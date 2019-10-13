@@ -1,6 +1,7 @@
 <template>
   <div class="container navbar-offset-top">
-    <div class="row">
+    <Activity class="single_hidden" v-if="showSingleContent" v-bind:class="{show_single_content: showSingleContent}" :activity_props="activity_props" v-on:closeSingleContent="closeSingleContent()"/>
+    <div class="row" v-bind:class="{hide: showSingleContent}">
       <div class="col-12 col-sm-6 activitiesCalendar">
           <CalendarShow v-if="activities.length != 0" />
        </div>
@@ -43,12 +44,7 @@
                   {{course.name}}
                 </option>                                                   
               </select>
-              <select v-if="activity.course_id == 0" v-model="activity.group_id" class="courseId">    
-                <option value="0" disabled>Chose group</option>   
-                <option v-for="group in groups" :value="group.id">
-                  {{group.name}}
-                </option>                                                   
-              </select>
+              <input v-model="activity.class_room" type="text" placeholder="Activity classroom" class="title"/>
               <span class="error" v-for="error in errors">{{error}}</span>
               <button class="u-full-width button-primary" type="submit" v-on:click="addActivity(false)" >Add activity</button>
             </div>
@@ -96,7 +92,7 @@
           </div>
         </div>
      </div>
-     <div class="row">
+     <div class="row" v-bind:class="{hide: showSingleContent}">
        <section class="col-12 activities_show">
         <h2>Activities</h2>
         <table class="table table-hover">
@@ -117,7 +113,7 @@
               <td>{{activitySelected.activityDate.split(" ")[1]}}</td>
               <td>{{activitySelected.duration}}</td>
               <td>{{activitySelected.class_room}}</td>
-              <td><router-link :to="'/activities/' + activitySelected.id">more..</router-link></td>
+              <td><a class="more" v-on:click="showSingle(activitySelected)">more..</a></td>
               <td><a v-on:click="deleteActivity(activitySelected.id)" class="delete"><i class="fa fa-trash-o" aria-hidden="true"></i></a></td>
           </tr>
         </table>
@@ -129,38 +125,42 @@
 
 <script>
 
+
+import axios from 'axios';
 import Calendar from './calendar.vue';
 import CalendarShow from './CalendarShow.vue';
-import axios from 'axios';
+import Activity from './Activity.vue';
+
 
 export default {
   name: 'Activities',
   components: {
     Calendar,
-    CalendarShow
+    CalendarShow,
+    Activity
   },
   data() {
     return {
       showSimple: false,
       showRecurent: false,
+      showSingleContent: false,
       newdate: null,
       courses: [],
-      groups: [],
+      
       dates: [],
       errors: [],
       success: "",
       activities: [],
       activitiesSelected: [],
       recurrence: 0,
+      activity_props: null,
+      hour: null,
       activity: {
         activityDate: "",
         title: '',
         duration: null,
-        hour: null,
-        course_id: 0,
-        recurrence_id: null,
-        professor_id: null,
-        group_id: 0
+        class_room: '',
+        course_id: 0
       },
       calendars: [
         { title: 'Simple activity',
@@ -210,6 +210,54 @@ export default {
     }
   },
   methods: {
+    addActivity(isRecurrent) {
+      this.errors = [];
+      if(!this.activity.title){
+        this.errors.push("Activity title is required");
+        return;
+      }
+      if(this.activity.duration===0){
+        this.errors.push("Duration is required");
+        return;
+      }
+       if(!this.hh || !this.mm){
+        this.errors.push("Time is required");
+        return;
+      }
+      if(this.activity.course_id === 0){
+        this.activity.course_id = null;
+      }
+
+      this.hour = this.hh + ":" + this.mm + ":00";
+
+      if(isRecurrent){
+        this.setDates();
+        let length = this.dates.length;
+        let recurrence = [{dateStart: this.dates[0], dateEnd: this.dates[length-1], everyDay: 0}];
+
+        for(var i = 0; i < length; i++){
+          let activityTemp = {activityDate: this.dates[i] + " " + this.hour, title: this.activity.title, duration: this.activity.duration, class_room: this.activity.class_room, course_id: this.activity.course_id};
+          axios.post(this.$store.getters.getUrl + '/activities', activityTemp).then((response) =>{
+            this.success = response.data['created'];
+          })
+          .catch(function(error){
+            this.errors.push("Something went wrong");
+          }.bind(this));
+        }
+
+      }else{
+        let newdate = this.calendars[0].value;
+        this.activity.activityDate = (newdate.getFullYear() + "-" + (newdate.getMonth()+1) + "-" + newdate.getDate());
+        this.activity.activityDate = this.activity.activityDate + " " + this.hour;
+
+        axios.post(this.$store.getters.getUrl + '/activities', this.activity).then((response) =>{
+          this.success = response.data['created'];
+        })
+        .catch(function(error){
+          this.errors.push("Something went wrong");
+        }.bind(this));
+      }
+    },
     setDates() {
      let newdate = this.calendars[1].value[0];
      this.dates.push(newdate.getFullYear() + "-" + (newdate.getMonth()+1) + "-" + newdate.getDate());
@@ -263,7 +311,7 @@ export default {
           this.courses = response.data.data;
       }.bind(this))
       .catch((error)=>{
-        //this.$router.push('/login'); 
+        this.$router.push('/login'); 
       });
     },
     deleteActivity(id){
@@ -276,10 +324,23 @@ export default {
         this.$router.push('/login'); 
       });
     },
+    showSingle(activity_props){
+      this.activity_props = activity_props;
+      this.showSingleContent = true;
+    },
+    closeSingleContent(){
+      this.activity_props = null;
+      this.showSingleContent = false;
+    }
   
   },
   created: function () {
-    if(!localStorage.getItem('token')){
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+      this.$emit('setAlert', alert);
       this.$router.push('/login'); 
     }
     this.getActivities();
@@ -368,6 +429,7 @@ input[type=number]{
 .navigation_buttons{
   padding: 0;
   margin: 0;
+  cursor: pointer;
 }
 .button-primary{
   margin-bottom: 50px;
@@ -396,6 +458,16 @@ input[type=number]{
 }
 .activitiesCalendar, .add_activity{
   margin-top: 50px;
+}
+.activities_show .more{
+  color: #36a832;
+  cursor: pointer;
+}
+.activities_show .more:hover{
+  color: #c3cbd6;  
+}
+.hide{
+  opacity: 0!important;
 }
 
 </style>

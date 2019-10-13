@@ -7,10 +7,10 @@
           <h3>Manage subjects</h3>
           <ul>
             <li v-for="(subject, index) in dataAll.subjects" v-if="index <= 5">
-              <a :href="'/subject/' + subject.hash" ><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{subject.name}}</a>
+              <router-link :to="'/subject/' + subject.hash" ><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{subject.name}}</router-link>
             </li>
-             <router-link v-if="dataAll.subjects.length > 5" class="more" :to="'/subjects'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.subjects && dataAll.subjects.length > 5" class="more" :to="'/subjects'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
@@ -19,10 +19,10 @@
           <h3>Manage courses</h3>
           <ul>
             <li v-for="(course, index) in dataAll.courses" v-if="index<=5">
-              <a :href="'/course/' + course.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{course.name}}</a>
+              <router-link :to="'/course/' + course.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{course.name}}</router-link>
             </li>
-            <router-link v-if="dataAll.courses.length > 5" class="more" :to="'/courses'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.courses && dataAll.courses.length > 5" class="more" :to="'/courses'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
@@ -31,10 +31,10 @@
           <h3>Manage activities</h3>
           <ul>
             <li v-for="(activity, index) in dataAll.activities" v-if="index <= 5">
-              <a :href="'/activity/' + activity.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{activity.title}}</a>
+              <router-link :to="'/activity/' + activity.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{activity.title}}</router-link>
             </li>
-            <router-link v-if="dataAll.activities.length > 5" class="more" :to="'/activities'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.activities && dataAll.activities.length > 5" class="more" :to="'/activities'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
@@ -43,10 +43,10 @@
           <h3>Manage exams</h3>
           <ul>
             <li v-for="(exam, index) in dataAll.exams" v-if="index <= 5">
-              <a :href="'/exam/' + exam.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{exam.title}}</a>
+              <router-link :to="'/exam/' + exam.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{exam.title}}</router-link>
             </li>
-            <router-link v-if="dataAll.exams.length > 5" class="more" :to="'/exams'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.exams && dataAll.exams.length > 5" class="more" :to="'/exams'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
@@ -55,10 +55,10 @@
           <h3>Manage groups</h3>
           <ul>
             <li v-for="(group, index) in dataAll.groups" v-if="index <= 5">
-              <a :href="'/group/' + group.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{group.name}}</a>
+              <router-link :to="'/group/' + group.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{group.name}}</router-link>
             </li>
-            <router-link v-if="dataAll.groups.length > 5" class="more" :to="'/groups'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.groups && dataAll.groups.length > 5" class="more" :to="'/groups'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
@@ -67,10 +67,10 @@
           <h3>Manage materials</h3>
           <ul>
             <li v-for="(material, index) in dataAll.materials" v-if="index <= 5">
-              <a :href="'/material/' + material.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{material.title}}</a>
+              <router-link :to="'/material/' + material.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{material.title}}</router-link>
             </li>
-            <router-link v-if="dataAll.materials.length > 5" class="more" :to="'/materials'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
           </ul>
+          <router-link v-if="dataAll.materials && dataAll.materials.length > 5" class="more" :to="'/materials'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
         </div>
       </article>
     </div>
@@ -82,13 +82,13 @@
   export default {
     name: 'Tabs',
     props: ['dataAll'],
-      data() {
-        return {
-        }
-      },
-      methods: {
-        
+    data() {
+      return {
       }
+    },
+    methods: {
+      
+    }
   }
 </script>
 
@@ -99,9 +99,11 @@
 .no-margin{
   margin: 0;
 }
+
 .no-padding{
   padding: 0;
 }
+
 .tab_article{
   overflow: hidden;
   position: relative;
@@ -156,6 +158,7 @@
       a{
         color: $basic_color;
         font-size: 1.5em;
+        display: inline-block;
 
         i{
           padding-right: 15px;
@@ -165,8 +168,7 @@
 
         &:hover{
           color: $light_grey;
-          margin-right: -10px;
-          margin-left: 10px;
+          transform: translateX(10px)!important;
         }
       }
 
@@ -207,12 +209,10 @@
         }
       }
     }
-
   }
 
   .more{
     display: block;
-    margin-top: 20px;
     color: $basic_green!important;
     padding: 5px 25px;
     font-size: 1.5em;
@@ -242,7 +242,61 @@
   }
 }
 
+@media screen and (max-width: 1200px) and (min-width: 992px){
+  .tab_article{
+    .tab_content{ 
+      h3{
+        font-size: 2em;
+        margin-top: 15px;
+      }
 
+      ul{
+        padding: 15px;
 
+        li a{
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) and (min-width: 767px){
+  .tab_article{
+    .tab_content{ 
+      h3{
+        font-size: 1.6em;
+        margin-top: 15px;
+      }
+
+      ul{
+        padding: 10px;
+
+        li a{
+          font-size: 1em;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px){
+  .tab_article{
+    .tab_content{ 
+      h3{
+        font-size: 1.6em;
+        margin-top: 15px;
+      }
+
+      ul{
+        padding: 5px;
+
+        li a{
+          font-size: 1.3em;
+        }
+      }
+    }
+  }
+}
 
 </style>

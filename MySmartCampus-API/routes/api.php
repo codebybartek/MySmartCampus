@@ -44,3 +44,5 @@ Route::group(['middleware' => ['ability:professor']], function()
 Route::post('login', 'JwtAuthenticateController@authenticate');
 
 
+
+

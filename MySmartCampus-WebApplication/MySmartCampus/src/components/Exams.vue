@@ -96,8 +96,13 @@ export default {
       },
   },
   created: function () {
-    if(!localStorage.getItem('token')){
-      //this.$router.push('/login'); 
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+      this.$emit('setAlert', alert);
+      this.$router.push('/login'); 
     }
     this.getExams();
   },

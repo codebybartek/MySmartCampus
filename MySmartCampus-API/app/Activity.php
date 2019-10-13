@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
-    protected $fillable = ['title', 'activityDate', 'duration', 'class_room', 'checked', 'hash'];
+    protected $fillable = ['title', 'activityDate', 'duration', 'class_room', 'hash'];
 
     protected $primaryKey = 'id';
 

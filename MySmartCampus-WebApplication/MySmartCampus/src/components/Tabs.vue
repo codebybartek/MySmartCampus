@@ -20,7 +20,7 @@
       },
       created: function(){
         this.$emit('toggleNavbar');
-        if(localStorage.getItem('token')){
+        if(!window.$cookies.get('token')){
           localStorage.clear();
           this.$router.go(0);
         }

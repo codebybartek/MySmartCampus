@@ -16,6 +16,7 @@
           <li key="3"><router-link to="/courses">Courses <i class="fa fa-map-o" aria-hidden="true"></i></router-link></li>
           <li key="4"><router-link to="/activities">Activities <i class="fa fa-calendar-check-o" aria-hidden="true"></i></router-link></li>
           <li key="5"><router-link to="/news">News <i class="fa fa-newspaper-o" aria-hidden="true"></i></router-link></li>
+          <li key="6"><router-link to="/materials">Materials <i class="fa fa-map-o" aria-hidden="true"></i></router-link></li>
         </ul>
       </nav>
       <aside class="col-md-3 col-lg-2 col-xl-3 left_menu">
@@ -47,9 +48,6 @@ export default {
       fixedTop: false,
       searchForm: false
     }
-  },
-  computed: {
-
   },
   methods: {
     clickBurger: function(){
@@ -102,21 +100,26 @@ export default {
 h1, h2 {
   font-weight: normal;
 }
+
 a:hover{
   text-decoration: none;
 }
+
 ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
+
 li {
   display: inline-block;
   padding: 0 10px;
 }
+
 a {
   color: #42b983;
 }
+
 .top{
   align-items: center;
   padding: 10px 0;
@@ -125,7 +128,7 @@ a {
   height: 75px;
   z-index: 999;
   background: $dark_grey;
-  transition: 1s;
+  transition: $standart_transition;
 
   a{
     color: $basic_color;
@@ -142,7 +145,7 @@ a {
     right: 0;
     left: 0;
     animation-name: showLinie2;
-    animation-duration: 2s;
+    animation-duration: 0.1s;
   }
 }
 
@@ -151,6 +154,7 @@ a {
     position: fixed;
     top: 0;
     width: 100%;
+    max-width: 1700px;
     background: rgba(0, 0, 0, 0.25);
   }
 }
@@ -167,6 +171,7 @@ a {
     }
   }
 }
+
 .navbar{
   justify-content: center;
   padding-left: 0;
@@ -205,12 +210,10 @@ a {
       &:hover > i{
         color: $basic_blue;
         transition: 1s;
-        transition-delay: 0.5s;
       };
-
   }
+}
 
-} 
 .left_menu{
   padding: 0 30px;
   
@@ -239,7 +242,7 @@ a {
     display: flex;
     position: absolute;
     align-items: center;
-    left: -235px;
+    left: -182px;
     top: -3px;
     z-index: 999;
     transition: 1s;
@@ -273,7 +276,7 @@ a {
   }
 }
 
- /*BURGER STYLE*/ 
+/*BURGER STYLE*/ 
 
 #burger{
   width: 30px;
@@ -360,7 +363,6 @@ a {
   }
 }
 
-
 /*ANIMATIONS*/
 
 @-webkit-keyframes showLinie {
@@ -372,7 +374,7 @@ a {
   to {width: 100%}
 }
 
-@media(max-width: 992px){
+@media screen and (max-width: 992px){
 .top{
   a{
     font-size: 16px;
@@ -421,6 +423,7 @@ a {
         margin-left: 5px;
     }
   }
+
   .search_form{
     background: rgba(0, 0, 0, 0.25);
     top: 5px;
@@ -437,19 +440,20 @@ a {
     }
   }
 }
+
 }
 
-@media(max-width: 767px){
+@media screen and (max-width: 767px){
 
 .top{
   padding-bottom: 0;
-  padding-top: 15px;
+  padding-top: 0;
   &:after{
     display: none;
   }
 }
 .showTopMobile{
-  background: #1d1d1d;
+  background: #1d1d1d!important;
 
   .search_form{
     input{
@@ -466,8 +470,9 @@ a {
 .navbar{
   width: 0;
   height: 0;
-  position: relative;
-  margin-top: 15px;
+  position: absolute;
+  height: 0;
+  margin-top: 35px;
 
   ul{
     display: table;
@@ -505,53 +510,65 @@ a {
     }
   }
 }
+
 .show{
   width: 100%;
   height: auto;
 
+  .navbar{
+    position: relative;
+  }
+
   ul{
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 999;
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  z-index: 999;
 
-    &:after{
-      animation-name: showLinie2;
-      animation-duration: 2s;
-      right: 0;
-      bottom: 0;
-    }
+	  &:after{
+	    animation-name: showLinie2;
+	    animation-duration: 2s;
+	    right: 0;
+	    bottom: 0;
+	  }
 
-    li{
-      &:nth-child(1){
-        transition-delay: 0.3s;
-        opacity: 1;
-        background: #1d1d1d;
-      }
-      &:nth-child(2){
-        transition-delay: 0.5s;
-        opacity: 1;
-        background: #1d1d1d;
-      }
-      &:nth-child(3){
-        transition-delay: 0.7s;
-        opacity: 1;
-        background: #1d1d1d;
-      }
-      &:nth-child(4){
-        transition-delay: 0.9s;
-        opacity: 1;
-        background: #1d1d1d;
-      }
-      &:nth-child(5){
-        transition-delay: 1.1s;
-        opacity: 1;
-        background: #1d1d1d;
-        padding-bottom: 10px;
-      }
-    }
+	  li{
+	    &:nth-child(1){
+	      transition-delay: 0.3s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	    }
+	    &:nth-child(2){
+	      transition-delay: 0.5s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	    }
+	    &:nth-child(3){
+	      transition-delay: 0.7s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	    }
+	    &:nth-child(4){
+	      transition-delay: 0.9s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	    }
+	    &:nth-child(5){
+	      transition-delay: 1.1s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	      padding-bottom: 10px;
+	    }
+	    &:nth-child(6){
+	      transition-delay: 1.1s;
+	      opacity: 1;
+	      background: #1d1d1d;
+	      padding-bottom: 10px;
+	    }
+  	}
   }
 }
 
 }
+
 </style>

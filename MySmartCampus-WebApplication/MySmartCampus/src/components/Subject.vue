@@ -2,24 +2,20 @@
   <div class="single_content">
     <div class="center_content">
       <span class="close_btn" v-on:click="closeBtn()">&times;</span>
-      <h1>Group: {{group.name}}</h1>
-      <h4>Students:</h4>
+      <h1>Subject: {{subject.name}}</h1>
+      <h4>Courses:</h4>
       <table class="table table-hover">
         <tr class="header_table">
           <th>Id</th>
           <th>Name</th>
-          <th>Email</th>
-          <th>Tag id</th>
           <th>Delete</th>
           <th>More</th>
         </tr>
-        <tr v-for="(student, index) in group.students">
+        <tr v-if="subject.courses.length > 0" v-for="(course, index) in subject.courses">
           <td>{{index + 1}}</td>
-          <td>{{student.name}}</td>
-          <td>{{student.email}}</td>
-          <td>{{student.tagId}}</td>
-          <td><span class="delete" v-on:click=deleteStudent(student.id)><i class="fa fa-trash-o" aria-hidden="true"></i> </span></td>
-          <td><router-link :to="'./student/' + student.id ">view <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link></td>
+          <td>{{course.name}}</td>
+          <td><span class="delete" v-on:click=deleteCourse(course.id)><i class="fa fa-trash-o" aria-hidden="true"></i> </span></td>
+          <td><router-link :to="'/course/' + course.hash ">view <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link></td>
         </tr>
       </table>
     </div>
@@ -29,49 +25,52 @@
 <script>
   import axios from 'axios';
   export default {
-    name: 'Group',
-    props: ['group_props'],
+    name: 'Subject',
+    props: ['subject_props'],
     data() {
       return {
-        group_hash: this.$route.params.hash,
-        group: null,
+        subject_hash: this.$route.params.hash,
+        subject: null,
       }
     },
     methods: {
-      getGroup(){
-        axios.get(this.$store.getters.getUrl + '/groups/' + this.group_hash)
+      getSubject(){
+        axios.get(this.$store.getters.getUrl + '/subjects/' + this.subject_hash)
         .then(function (response) {
-            this.group = response.data.data[0];
-            console.log(this.group);
+            this.subject = response.data.data[0];
+            console.log(this.subject);
         }.bind(this))
         .catch((error)=>{
           this.$router.push('/login'); 
         });
       },
       closeBtn(){
-        if(!this.group_hash){
+        if(!this.subject_hash){
           this.$emit('closeSingleContent');
         }else{
           this.$router.push('/'); 
         }
+      },
+      deleteCourse(id){
+
       }
 
     },
     created: function(){
+    this.$emit('setAlert');
       if(window.$cookies.get('token')){
         if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
           let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
           this.$emit('setAlert', alert);
           this.$router.push('/login'); 
         }
-        if(this.group_hash){
-            this.getGroup();
+        if(this.subject_hash){
+            this.getSubject();
         }else{
-          this.group = this.group_props;
+          this.subject = this.subject_props;
         }
-      }else{
-        this.$router.push('/login'); 
       }
+      
     }
   }
 </script>

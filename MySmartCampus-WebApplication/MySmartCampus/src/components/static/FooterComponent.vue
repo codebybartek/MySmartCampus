@@ -1,18 +1,18 @@
 <template>
-  <div class="visible">
-    <div class="container-fluid">
+  <footer class="w100 custom-padding visible footer">
+    <div class="container-fluid padding-30">
       <div class="row">
-        <footer class="col-xs-12 col-sm-12 padding-30 footer">
-          <header class="header">
+          <header class="col-xs-12 col-sm-6 header" >
             <a href="#"><img src="../../assets/logo.png" alt="B.Koziel"></a>
           </header>
-          <p class="copyrights">
-            Copyrights & Bartłomiej Kozieł
-          </p>
-        </footer>
+          <div class="col-xs-12 col-sm-6 copyrights">
+            <p>
+              Copyrights & Bartłomiej Kozieł
+            </p>
+          </div>
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script>
@@ -38,27 +38,23 @@
 @import '@/styles/variables.scss';
 
 .footer{
-  
-  padding-top: 15px;
-  padding-bottom: 15px;
-
-  vertical-align: middle;
-
   .copyrights{
-    margin: auto 0;
-    position: absolute;
-    right: 30px;
-    top: 0;
-    bottom: 0;
-    display: table;
     font-weight: 300;
-    font-family: 'Cormorant', serif;
+    display: flex;
+    align-items: center;
+    text-align: right;
+    font-family: 'Dancing Script', cursive;
+
+    p{
+      margin: 0;
+      width: 100%;
+    }
   }
 
   .header{
-    float: left;
+    text-align: left;
     img{
-      max-width: 130px;
+      max-width: 150px;
     }
   }
 }

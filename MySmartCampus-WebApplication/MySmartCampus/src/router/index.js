@@ -2,13 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Courses from '@/components/Courses'
+import Course from '@/components/Course'
 import Activities from '@/components/Activities'
+import Activity from '@/components/Activity'
 import Groups from '@/components/Groups'
+import Group from '@/components/Group'
 import Subjects from '@/components/Subjects'
+import Subject from '@/components/Subject'
 import Materials from '@/components/Materials'
+import Material from '@/components/Material'
 import Exams from '@/components/Exams'
 import News from '@/components/News'
-
+import NewsSingle from '@/components/NewsSingle'
 
 import Login from '@/components/Login'
 
@@ -35,9 +40,19 @@ export default new Router({
       component: Courses
     },
     {
+      path: '/course/:hash',
+      name: 'course',
+      component: Course
+    },
+    {
       path: '/activities',
       name: 'activities',
       component: Activities
+    },
+    {
+      path: '/activity/:hash',
+      name: 'activity',
+      component: Activity
     },
     {
       path: '/groups',
@@ -45,14 +60,29 @@ export default new Router({
       component: Groups
     },
     {
+      path: '/group/:hash',
+      name: 'group',
+      component: Group
+    },
+    {
       path: '/subjects',
       name: 'subjects',
       component: Subjects
     },
     {
+      path: '/subject/:hash',
+      name: 'subject',
+      component: Subject
+    },
+    {
       path: '/materials',
       name: 'materials',
       component: Materials
+    },
+    {
+      path: '/material/:hash',
+      name: 'material',
+      component: Material
     },
     {
       path: '/exams',
@@ -64,5 +94,10 @@ export default new Router({
       name: 'news',
       component: News
     },
+    {
+      path: '/news/:hash',
+      name: 'newsSingle',
+      component: NewsSingle
+    }
   ]
 })

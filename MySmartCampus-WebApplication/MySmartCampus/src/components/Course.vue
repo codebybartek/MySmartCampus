@@ -1,8 +1,8 @@
 <template>
   <div class="single_content">
     <div class="center_content">
-      <span class="close_btn" v-on:click="closeBtn()"><i class="fa fa-times" aria-hidden="true"></i></span>
-      <h1>{{course.name}} <span>{{course.group[0].name}}</span></h1>
+      <span class="close_btn" v-on:click="closeBtn()">&times;</span>
+      <h1>{{course.name}} <span>{{course.group.name}}</span></h1>
       <h4>Activities:</h4>
       <table class="table table-hover">
         <tr class="header_table">
@@ -15,7 +15,7 @@
           <th>Delete</th>
           <th>More</th>
         </tr>
-        <tr v-for="(activity, index) in course.activities">
+        <tr v-if="course.activities.length > 0" v-for="(activity, index) in course.activities">
           <td>{{index + 1}}</td>
           <td>{{activity.title}}</td>
           <td>{{activity.activityDate.split(" ")[0]}}</td>
@@ -36,7 +36,7 @@
           <th>Delete</th>
           <th>More</th>
         </tr>
-        <tr v-for="(news, index) in course.news">
+        <tr v-if="course.news.length > 0" v-for="(news, index) in course.news">
           <td>{{index + 1}}</td>
           <td>{{news.title}}</td>
           <td>{{news.news_date}}</td>
@@ -53,20 +53,50 @@
   import axios from 'axios';
   export default {
     name: 'Course',
-    props: ['course'],
+    props: ['course_props'],
     data() {
       return {
-          
+        course_hash: this.$route.params.hash,
+        course: null, 
       }
     },
     methods: {
+      getCourse(){
+        axios.get(this.$store.getters.getUrl + '/courses/' + this.course_hash)
+        .then(function (response) {
+            this.course = response.data.data[0];
+            console.log(this.course);
+        }.bind(this))
+        .catch((error)=>{
+          this.$router.push('/login'); 
+        });
+      },
       closeBtn(){
-        this.$emit('closeSingleContent');
+        if(!this.course_hash){
+          this.$emit('closeSingleContent');
+        }else{
+          this.$router.push('/'); 
+        }
+      },
+      deleteActivity(id){
+      
       }
       
     },
     created: function(){
-
+      if(window.$cookies.get('token')){
+        if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+          let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+          this.$emit('setAlert', alert);
+          this.$router.push('/login'); 
+        }
+        if(this.course_hash){
+            this.getCourse();
+        }else{
+          console.log('sfd');
+          this.course = this.course_props;
+        }
+      }
     }
   }
 </script>
@@ -88,9 +118,9 @@ h1{
 }
 
 .single_content{
-  margin-top: 75px;
-  position: absolute;
-  height: 100vh;
+  padding-top: 75px;
+  position: fixed;
+  min-height: 100vh;
   width: 100%;
   top: 0;
   left: 0;
@@ -102,15 +132,15 @@ h1{
 
   .center_content{
     padding: 50px;
-    border: 1px solid $basic_color;
   }
 }
 
 .close_btn{
   position: absolute;
   right: 30px;
-  top: 20px;
-  font-size: 2em;
+  top: 105px;
+  font-size: 4em;
+  line-height: 0;
   cursor: pointer;
 }
 

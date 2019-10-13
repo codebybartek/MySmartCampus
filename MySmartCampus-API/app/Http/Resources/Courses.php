@@ -27,7 +27,7 @@ class Courses extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'group' => Group::all()->where('id', $this->group_id),
+            'group' => Group::all()->where('id', $this->group_id)->first(),
             'activities' => $course->activities,
             'news' => $course->news
         ];

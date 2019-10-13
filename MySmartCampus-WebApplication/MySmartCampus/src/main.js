@@ -5,24 +5,43 @@ import App from './App'
 import router from './router'
 import store from './store/store'
 import axios from 'axios'
-
+import VueCookies from 'vue-cookies'
 
 import BootstrapVue from 'bootstrap-vue'
-
-Vue.use(BootstrapVue)
-
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+
+
+Vue.use(BootstrapVue)
+
 Vue.config.productionTip = false
 
-axios.interceptors.request.use(function (config) {
-    if(localStorage.getItem('token')) {
-    	config.headers.Authorization =  'Bearer' + localStorage.getItem('token');
-    }
+Vue.use(VueCookies)
 
-    return config;
+axios.interceptors.request.use(function (config) {
+	if(window.$cookies.get('token')) {
+		config.headers.Authorization =  'Bearer ' + window.$cookies.get('token');
+	}
+
+	return config;
 });
+
+Vue.directive('add-class-hover', {
+  bind(el, binding, vnode) {    
+    const { value="" } = binding;
+    el.addEventListener('mouseenter',()=> {
+        el.classList.add(value)
+    });
+    el.addEventListener('mouseleave',()=> {
+        el.classList.remove(value)
+    });
+  },
+  unbind(el, binding, vnode) {
+    el.removeEventListener('mouseenter');
+    el.removeEventListener('mouseleave')
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

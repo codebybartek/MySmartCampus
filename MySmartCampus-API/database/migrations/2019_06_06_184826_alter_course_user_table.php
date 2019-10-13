@@ -17,7 +17,8 @@ class AlterCourseUserTable extends Migration
             $table->integer('user_id')
                 ->unsigned();
             $table->integer('course_id')
-                ->unsigned();
+                ->unsigned()
+                ->nullable();
             $table->integer('subject_id')
                 ->unsigned();
             $table->foreign('user_id')

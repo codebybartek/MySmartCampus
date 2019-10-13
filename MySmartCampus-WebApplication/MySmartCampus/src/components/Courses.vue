@@ -1,6 +1,7 @@
 <template>
    <div class="container navbar-offset-top">
-      <Course class="single_hidden" v-bind:class="{show_single_content: showSingleContent}" :course="course" v-on:closeSingleContent="closeSingleContent()"/>
+      <Course class="single_hidden" v-if="showSingleContent" v-bind:class="{show_single_content: showSingleContent}" :course_props="course_props" v-on:closeSingleContent="closeSingleContent()"/>
+      <AddCourse class="single_hidden" v-if="showAddFormContent" v-bind:class="{show_add_form_content: showAddFormContent}" v-on:closeSingleContent="closeSingleContent()" />
       <div class="row">
         <section class="col-12 section_header">
           <h1>Courses</h1>
@@ -12,7 +13,7 @@
               <ul class="course_activities">
                   <h4>Activities:</h4>
                   <li v-for="(activity, index) in course.activities" v-if="index < 2 ">
-                    <router-link :to="'./activity/' + activity.id ">
+                    <router-link :to="'./activity/' + activity.hash ">
                       {{activity.title}} - 
                       <span>{{activity.activityDate}}</span>
                     </router-link>
@@ -21,7 +22,7 @@
               <ul class="course_news">
                   <h4>News:</h4>
                   <li v-for="(news, index) in course.news" v-if="index < 5 ">
-                    <router-link :to="'./news/' + news.id ">{{news.title}}</router-link>
+                    <router-link :to="'./news/' + news.hash ">{{news.title}}</router-link>
                   </li>
               </ul>
               <a v-on:click="deleteCourse(course.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
@@ -35,7 +36,7 @@
         </section>
         <div class="col-12 navigation_buttons">
           <ul>
-              <li><router-link class="nav-button" :to="'/courses/add/' + subject_id">Add Course</router-link></li>
+              <li class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Course <i class="fa fa-plus" aria-hidden="true"></i></a></li>
           </ul>
        </div>
       </div>
@@ -47,23 +48,25 @@
 import axios from 'axios';
 import { Carousel3d, Slide } from 'vue-carousel-3d';
 import Course from './Course.vue';
-
+import AddCourse from './add_forms/AddCourse.vue';
 
 export default {
   name: 'Courses',
   components: {
     Carousel3d,
     Slide,
-    Course
+    Course,
+    AddCourse
   },
   data () {
     return {
       courses: [],
-      course: null,
+      course_props: null,
       subject_id: this.$route.params.id,
       activity_id: 0,
       article_height: 'auto',
       showSingleContent: false,
+      showAddFormContent: false,
       height: 0,
       was_changed: false
     }
@@ -102,17 +105,26 @@ export default {
           this.$router.push('/login'); 
         });
       },
-      showSingle(course){
-        this.course = course;
+      showSingle(course_props){
+        this.course_props = course_props;
         this.showSingleContent = true;
       },
       closeSingleContent(){
-        this.course = null;
+        this.course_props = null;
         this.showSingleContent = false;
+        this.showAddFormContent = false;
+      },
+      addFormContent(){
+        this.showAddFormContent = true;
       }
   },
   created: function () {
-    if(!localStorage.getItem('token')){
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+      this.$emit('setAlert', alert);
       this.$router.push('/login'); 
     }
     this.getCourses();
@@ -132,65 +144,6 @@ h1{
 h2{
   margin-bottom: 20px;
   font-size: 2.2em;
-}
-
-.carousel-3d-slide {
-  background: $light_grey;
-  opacity: 0.2!important;
-  border: none;
-
-  .course{
-    border: 1px solid $light_grey;
-    padding: 15px;
-    text-align: center;
-
-    h2{
-      color: $dark_grey;
-      text-align: center;
-    }
-
-    h4{
-      color: $basic_blue;
-    }
-
-    .more{
-      color: $basic_green;
-
-      &:hover{
-
-        i{
-          margin-right: -10px!important;
-          margin-left: 10px!important;
-        }
-      }
-    }
-
-    a{
-      color: $basic_color;
-      margin-bottom: 5px;
-      display: inline-block;
-      transition: $standart_transition;
-      font-size: 0.9em;
-
-      span{
-        color: $basic_green;
-        transition: $standart_transition;
-      }
-
-      &:hover{
-        color: $basic_blue;
-
-        span{
-          color: $basic_blue;
-        }
-      }
-    }
-  }
-
-}
-.current{
-  background: $light_grey;
-  opacity: 0.8!important;
 }
 
 </style>

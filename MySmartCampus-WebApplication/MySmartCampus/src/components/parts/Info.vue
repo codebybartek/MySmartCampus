@@ -1,20 +1,20 @@
 <template>
-  <div class="w100 info">
+  <div id="info_offset" class="w100 info custom-padding-60">
     <img class="fixed_img" src="../../assets/info.jpg" alt="info">
     <div class="container">
       <div class="row">
-        <section class="col-xs-12 col-sm-6 students_info">
+        <section class="col-xs-12 col-sm-6 students_info custom-padding-60">
           <i class="fa fa-users" aria-hidden="true"></i>
-          <span id="students" class="count">25</span>
+          <span id="students" class="count">{{student_counter}}</span>
           <h2>Students in service</h2>
         </section>
-        <section class="col-xs-12 col-sm-6 professors_info">
+        <section class="col-xs-12 col-sm-6 professors_info custom-padding-60">
           <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-          <span id="professors" class="count">25</span>
+          <span id="professors" class="count">{{professor_counter}}</span>
           <h2>Professors in service</h2>
         </section>
       </div>
-      <div class="row">
+      <div class="row row-margin">
         <agile :fade="true" :navButtons="false" :dots="false" ref="carousel">
           <div class="slide">
             <div class="head">
@@ -34,9 +34,6 @@
           </div>
         </agile>
       </div>
-
-
-
     </div>
   </div>
 </template>
@@ -53,14 +50,40 @@
     },
     data() {
       return {
-          
+        professor_number: 45,
+        student_number: 50,
+        professor_counter: 0,
+        student_counter: 0
       }
     },
     methods: {
-      
+      count(event){
+          let container = document.getElementById('info_offset');
+          let scroller = document.documentElement.scrollTop;
+          if(window.scrollY > container.offsetTop - 350){
+            this.counter();
+          }
+      },
+      counter(){
+        let open_counter = false;
+        if(this.professor_counter <= this.professor_number){
+          this.professor_counter++;
+          open_counter = true;
+        }
+        if(this.student_counter <= this.student_number){
+          this.student_counter++;
+          open_counter = true;
+        }
+        if(open_counter === true){
+           setTimeout(this.counter, 70);
+        }
+        
+      }
+
     },
     created: function(){
-      
+      setTimeout(this.count, 150);
+      window.addEventListener('scroll', this.count);
     }
   }
 </script>
@@ -70,6 +93,10 @@
 @import '@/styles/variables.scss';
 
 .info{
+
+  h2{
+    font-family: 'Dancing Script', cursive;
+  }
 
   .agile{
     z-index: 6;
@@ -115,17 +142,14 @@
     display: block;
   }
 
-  display: flex;
-  align-items: center;
-  min-height: 600px;
-  text-align: center;
-
-
   .fixed_img{
     top: 0;
     left: 0;
+    right: 0;
     position: fixed;
     z-index: 1;
+    max-width: 1700px;
+    margin: 0 auto;
   }
 
   .students_info, .professors_info{
@@ -142,7 +166,7 @@
     }
 
     .count{
-      font-size: 3em;
+      font-size: 4em;
       top: -15px;
       margin-left: 10px;
       color: $basic_color;
@@ -150,9 +174,18 @@
       position: relative;
     }
   }
-
 }
 
-
+@media screen and (max-width: 992px){
+  .info .fixed_img {
+    top: 0;
+    right: 0;
+    left: auto;
+    height: 100vh;
+    position: fixed;
+    min-width: auto;
+    z-index: 1;
+  }
+}
 
 </style>

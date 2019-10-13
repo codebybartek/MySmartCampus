@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Activity;
-use App\Course;
 use App\Http\Resources\Activities as ActivityResources;
-use App\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ActivitiesController extends Controller
 {
@@ -55,35 +54,36 @@ class ActivitiesController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Activity::create($request->all());
+        $activity = new Activity();
+        $activity->title = $request->title;
+        $activity->activityDate = $request->activityDate;
+        $activity->duration = $request->duration;
+        $activity->class_room = $request->class_room;
+        $activity->hash = md5(time()).rand(0, 999);
 
-            return response()->json([
-                'created' => 'Activity was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        Activity::create($activity->toArray());
+
+        $activityId = Activity::all()->where('hash', $activity->hash)->pluck('id')->first();
+
+        DB::table('activity_course')->insert(
+            ['course_id' => $request->course_id, 'activity_id' => $activityId]
+        );
+
+        return response()->json([
+            'created' => 'Activity was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $activity = Activity::all()->where('activity_id', $id);
-            return ActivityResources::collection($activity);
-        }else{
-            return "unauthorized";
-        }
+        $activity = Activity::all()->where('hash', $hash);
+        return ActivityResources::collection($activity);
     }
 
     /**

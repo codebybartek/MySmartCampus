@@ -268,6 +268,7 @@ export default {
   width: max-content;
   min-width: max-content;
   margin: 0 auto;
+  color: #333;
 }
 .v-calendar .content {
   display: flex;

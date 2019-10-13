@@ -84,7 +84,7 @@ export default {
     
   },
   created: function () {
-    if(!localStorage.getItem('token')){
+    if(!this.$store.getters.getToken){
       this.$router.push('/login'); 
     }
   }

@@ -1,5 +1,7 @@
 <template>
    <div class="container navbar-offset-top">
+      <Subject class="single_hidden" v-if="showSingleContent" v-bind:class="{show_single_content: showSingleContent}" :subject_props="subject_props" v-on:closeSingleContent="closeSingleContent()" @setAlert="setAlert"/>
+      <AddSubject class="single_hidden" v-if="showAddFormContent" v-bind:class="{show_add_form_content: showAddFormContent}" v-on:closeSingleContent="closeSingleContent()" @setAlert="setAlert"/>
       <div class="row">
         <section class="col-12 section_header">
           <h1>Subjects</h1>
@@ -11,13 +13,16 @@
               <ul class="subject_courses">
                   <h4>Courses:</h4>
                   <li v-for="(course, index) in subject.courses" v-if="index < 2 ">
-                    <router-link :to="'./course/' + course.id ">
+                    <router-link :to="'/course/' + course.hash ">
                       {{course.name}}
                     </router-link>
                   </li>
                   <router-link v-on:click="setActivities(subject.courses)" v-if="subject.courses.length > 2" class="more" :to="'/courses'">More Courses <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
               </ul>
               <a v-on:click="deleteSubject(subject.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+
+              <a class="button_more" v-on:click="showSingle(subject)" >More <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+
               <a class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
             </article>
           </slide>
@@ -25,7 +30,7 @@
         </section>
         <div class="col-12 navigation_buttons">
           <ul>
-              <li><router-link class="nav-button" :to="'/subjects/add/' + subject_id">Add subject</router-link></li>
+              <li class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Subject <i class="fa fa-plus" aria-hidden="true"></i></a></li>
           </ul>
        </div>
       </div>
@@ -36,62 +41,90 @@
 
 import axios from 'axios';
 import { Carousel3d, Slide } from 'vue-carousel-3d';
+import Subject from './Subject.vue';
+import AddSubject from './add_forms/AddSubject.vue';
 
 
 export default {
   name: 'Subjects',
   components: {
     Carousel3d,
-    Slide
+    Slide,
+    Subject,
+    AddSubject
   },
   data () {
     return {
       subjects: [],
+      subject_props: null,
+      showSingleContent: false,
       subject_id: this.$route.params.id,
       activity_id: 0,
       article_height: 'auto',
+      showAddFormContent: false,
       height: 0,
       was_changed: false
     }
   },
   methods: {
-      getSubjects(){
-        axios.get(this.$store.getters.getUrl + '/subjects')
-        .then(function (response) {
-            this.subjects = response.data.data;
-            setTimeout(this.matchHeight, 50);
-        }.bind(this))
-        .catch((error)=>{
-          this.$router.push('/login'); 
-        });
-      },
-      matchHeight() {
-        for(let i = 0; i < this.$refs.articles_height.length; i++){
-          if(this.$refs.articles_height[i].clientHeight > this.height){
-            this.height = this.$refs.articles_height[i].clientHeight;
-          } 
-        }
-        this.height = this.height + 30;
-        this.article_height = this.height + 'px';
-        console.log(this.article_height);
-      },
-      onAfterSlideChange(index) {
-        this.was_changed = true;
-      },
-      deletesubject(id){
-         axios.delete(this.$store.getters.getUrl + '/subjects/'+ id)
-         .then(function (response) {
-            alert(response.data['deleted']);
-            this.getsubjects();
-        }.bind(this))
-        .catch((error)=>{
-          this.$router.push('/login'); 
-        });
-      },
+    getSubjects(){
+      axios.get(this.$store.getters.getUrl + '/subjects')
+      .then(function (response) {
+          this.subjects = response.data.data;
+          setTimeout(this.matchHeight, 50);
+      }.bind(this))
+      .catch((error)=>{
+        this.$router.push('/login'); 
+      });
+    },
+    matchHeight() {
+      for(let i = 0; i < this.$refs.articles_height.length; i++){
+        if(this.$refs.articles_height[i].clientHeight > this.height){
+          this.height = this.$refs.articles_height[i].clientHeight;
+        } 
+      }
+      this.height = this.height + 30;
+      this.article_height = this.height + 'px';
+      console.log(this.article_height);
+    },
+    onAfterSlideChange(index) {
+      this.was_changed = true;
+    },
+    deleteSubject(id){
+       axios.delete(this.$store.getters.getUrl + '/subjects/'+ id)
+       .then(function (response) {
+          let alert = {content: response.data['deleted'], alertClass: "danger"};
+          this.$emit('setAlert', alert);
+          this.getSubjects();
+      }.bind(this))
+      .catch((error)=>{
+        this.$router.push('/login'); 
+      });
+    },
+    showSingle(subject_props){
+      this.subject_props = subject_props;
+      this.showSingleContent = true;
+    },
+    closeSingleContent(){
+      this.subject_props = null;
+      this.showSingleContent = false;
+      this.showAddFormContent = false;
+    },
+    addFormContent(){
+      this.showAddFormContent = true;
+    },
+    setAlert(alert){
+      this.$emit('setAlert', alert);
+      this.getSubjects();
+    }
   },
   created: function () {
-    if(!localStorage.getItem('token')){
-      //this.$router.push('/login'); 
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      alert('Your token get expiered! Please login again :)');
+      this.$router.push('/login'); 
     }
     this.getSubjects();
   },
@@ -113,9 +146,6 @@ h2{
 }
 
 .carousel-3d-slide {
-  background: $light_grey;
-  opacity: 0.2!important;
-
   .subject{
     border: 1px solid $light_grey;
     padding: 15px;
@@ -128,39 +158,6 @@ h2{
 
     h4{
       color: $basic_blue;
-    }
-
-    .more{
-      color: $basic_green;
-
-      &:hover{
-
-        i{
-          margin-right: -10px!important;
-          margin-left: 10px!important;
-        }
-      }
-    }
-
-    a{
-      color: $basic_color;
-      margin-bottom: 5px;
-      display: inline-block;
-      transition: $standart_transition;
-      font-size: 0.9em;
-
-      span{
-        color: $basic_green;
-        transition: $standart_transition;
-      }
-
-      &:hover{
-        color: $basic_blue;
-
-        span{
-          color: $basic_blue;
-        }
-      }
     }
   }
 

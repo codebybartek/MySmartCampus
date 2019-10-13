@@ -50,7 +50,7 @@ class Groups extends JsonResource
         $students = StudentsGroupsResource::collection($studentsGroup);*/
 
         return [
-            'id' => $this->group_id,
+            'id' => $this->id,
             'name' => $this->name,
             'students' => $students,
             'professor' => $professors[0]

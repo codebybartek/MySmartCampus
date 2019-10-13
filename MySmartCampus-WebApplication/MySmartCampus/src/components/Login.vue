@@ -42,21 +42,29 @@
           this.errors.push("Password is required");
           return;
         }
+        
        axios.post(this.$store.getters.getUrl + '/login', this.credential).then((response) =>{
-          console.log(response.data);
-          localStorage.setItem('token', response.data.token);
-          this.$emit('toggleNavbar');
-          this.$router.push('/'); 
+          console.log(response.data.token);
+          this.$store.commit("setToken", {
+            token: response.data.token
+          })
+          let currentDateWithFormat =  new Date().getTime();
+          localStorage.setItem('Expiration', currentDateWithFormat);
+          window.$cookies.set("token",response.data.token,"10MIN")
+          this.$router.push('/');
+          this.$emit('toggleNavbar'); 
         })
         .catch(function(error){
-          this.errors.push("There is no useres with this");
+          this.errors = [];
+          this.errors.push(error);
         }.bind(this));
       }
     },
     created: function(){
       this.$emit('toggleNavbar');
-      if(localStorage.getItem('token')){
-        localStorage.clear();
+      
+      if(this.$store.getters.getToken){
+      
         this.$router.go(0);
       }
     }
@@ -71,19 +79,6 @@ h1, h2 {
     text-align: center;
     width: 100%;
     margin: 30px 0;
-}
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #fff;
-  opacity: 1; /* Firefox */
-  font-weight: 300;
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #fff;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-  color: #fff;
 }
 
 .background_login{

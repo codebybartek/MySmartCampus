@@ -4,7 +4,7 @@
     <About />
     <Tabs :dataAll=dataAll />
     <Cards />
-    <Info />
+    <Info/>
   </div>
 </template>
 
@@ -45,10 +45,16 @@ export default {
         this.$router.push('/login'); 
       });
     },
+    
 
   },
   created: function(){
-    if(!localStorage.getItem('token')){
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+      this.$emit('setAlert', alert);
       this.$router.push('/login'); 
     }
     this.getData();
@@ -126,7 +132,7 @@ h3{
   }
 }
 
-@media(max-width: 767px){
+@media screen and (max-width: 767px){
 .banner{
   img{
     max-width: 200%;

@@ -1,6 +1,6 @@
 <template>
    <div class="container navbar-offset-top">
-      <Group class="single_hidden" v-bind:class="{show_single_content: showSingleContent}" :group="group" v-on:closeSingleContent="closeSingleContent()"/>
+      <Group class="single_hidden" v-bind:class="{show_single_content: showSingleContent}" :group_props="group_props" v-on:closeSingleContent="closeSingleContent()"/>
       <div class="row">
         <section class="col-12 section_header">
           <h1>Groups</h1>
@@ -12,7 +12,7 @@
               <ul class="group_students">
                   <h4>Students:</h4>
                   <li v-for="(student, index) in group.students" v-if="index < 2 ">
-                    <router-link :to="'./students/' + student.id ">
+                    <router-link :to="'./student/' + student.id ">
                       <span>{{index + 1}}. </span> {{student.name}}
                     </router-link>
                   </li>
@@ -50,7 +50,7 @@ export default {
   data () {
     return {
       groups: [],
-      group: null,
+      group_props: null,
       subject_id: this.$route.params.id,
       activity_id: 0,
       article_height: 'auto',
@@ -93,18 +93,23 @@ export default {
         this.$router.push('/login'); 
       });
     },
-    showSingle(group){
-      this.group = group;
+    showSingle(group_props){
+      this.group_props = group_props;
       this.showSingleContent = true;
     },
     closeSingleContent(){
-      this.group = null;
+      this.group_props = null;
       this.showSingleContent = false;
     }
   },
   created: function () {
-    if(!localStorage.getItem('token')){
-      //this.$router.push('/login'); 
+    if(!window.$cookies.get('token')){
+      this.$router.push('/login'); 
+    }
+    if(parseInt(localStorage.getItem('Expiration')) + 600000 < new Date().getTime() ){
+      let alert = {content: 'Your token get expiered. Please login again.)', alertClass: "warning"};
+      this.$emit('setAlert', alert);
+      this.$router.push('/login'); 
     }
     this.getGroups();
   },
@@ -126,11 +131,8 @@ h2{
 }
 
 .carousel-3d-slide {
-  background: $light_grey;
-  opacity: 0.2!important;
 
   .group{
-    border: 1px solid $light_grey;
     padding: 15px;
     text-align: center;
 
@@ -142,46 +144,7 @@ h2{
     h4{
       color: $basic_blue;
     }
-
-    .more{
-      color: $basic_green;
-
-      &:hover{
-
-        i{
-          margin-right: -10px!important;
-          margin-left: 10px!important;
-        }
-      }
-    }
-
-    a{
-      color: $basic_color;
-      margin-bottom: 5px;
-      display: inline-block;
-      transition: $standart_transition;
-      font-size: 0.9em;
-
-      span{
-        color: $basic_green;
-        transition: $standart_transition;
-        padding: 5px;
-      }
-
-      &:hover{
-        color: $basic_blue;
-
-        span{
-          color: $basic_blue;
-        }
-      }
-    }
   }
-
-}
-.current{
-  background: $light_grey;
-  opacity: 0.8!important;
 }
 
 </style>
