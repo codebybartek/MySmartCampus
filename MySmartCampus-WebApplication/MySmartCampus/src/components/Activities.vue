@@ -3,11 +3,10 @@
     <Activity class="single_hidden" v-if="showSingleContent" v-bind:class="{show_single_content: showSingleContent}" :activity_props="activity_props" v-on:closeSingleContent="closeSingleContent()"/>
     <div class="row" v-bind:class="{hide: showSingleContent}">
       <div class="col-12 col-sm-6 activitiesCalendar">
-          <CalendarShow v-if="activities.length != 0" />
+          <CalendarShow />
        </div>
        <div class="add_activity col-12 col-lg-6">
-         <h1 @click="setDates()">Add your activity</h1>
-         <span class="success">{{success}}</span>      
+         <h1 @click="setDates()">Add your activity</h1>     
          <section class="navigation_buttons">
            <h3 class="nav-button" @click="showRecurent = !showRecurent; showSimple = false">{{ calendars[1].title }}</h3>
            <h3 class="nav-button" @click="showSimple = !showSimple; showRecurent = false">{{ calendars[0].title }}</h3>
@@ -146,7 +145,6 @@ export default {
       showSingleContent: false,
       newdate: null,
       courses: [],
-      
       dates: [],
       errors: [],
       success: "",
@@ -238,7 +236,8 @@ export default {
         for(var i = 0; i < length; i++){
           let activityTemp = {activityDate: this.dates[i] + " " + this.hour, title: this.activity.title, duration: this.activity.duration, class_room: this.activity.class_room, course_id: this.activity.course_id};
           axios.post(this.$store.getters.getUrl + '/activities', activityTemp).then((response) =>{
-            this.success = response.data['created'];
+            let alert = {content: response.data['created'], alertClass: "success"};
+            this.$emit('setAlert', alert);
           })
           .catch(function(error){
             this.errors.push("Something went wrong");
@@ -251,7 +250,8 @@ export default {
         this.activity.activityDate = this.activity.activityDate + " " + this.hour;
 
         axios.post(this.$store.getters.getUrl + '/activities', this.activity).then((response) =>{
-          this.success = response.data['created'];
+          let alert = {content: response.data['created'], alertClass: "success"};
+          this.$emit('setAlert', alert);
         })
         .catch(function(error){
           this.errors.push("Something went wrong");
@@ -306,7 +306,7 @@ export default {
         });
     },
     getCourses(){
-      axios.get(this.$store.getters.getUrl + '/courses/')
+      axios.get(this.$store.getters.getUrl + '/courses')
       .then(function (response) {
           this.courses = response.data.data;
       }.bind(this))
@@ -317,7 +317,8 @@ export default {
     deleteActivity(id){
       axios.delete(this.$store.getters.getUrl + '/activities/'+ id)
       .then(function (response) {
-        alert(response.data['deleted']);
+        let alert = {content: response.data['deleted'], alertClass: "danger"};
+        this.$emit('setAlert', alert);
         this.getActivities();
       }.bind(this))
       .catch((error)=>{
@@ -358,17 +359,6 @@ export default {
   display: table;
   margin: 0 auto;
 }
-select, input{
-  color: #fff;
-  border: 1px solid #fff;
-  background: transparent;
-  padding: 7px 15px;
-  display: inline-block;
-  width: 70%;
-}
-select option {
-  color: #1d1d1d;
-}
 input::placeholder{
   color: #c3cbd6;
 }
@@ -390,11 +380,6 @@ input::placeholder{
 .error{
   color: red;
   display: block;
-}
-.success{
-  display: block;
-  margin-bottom: 30px;
-  color: green;
 }
 .label{
   display: block;

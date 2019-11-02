@@ -14,8 +14,10 @@ import Material from '@/components/Material'
 import Exams from '@/components/Exams'
 import News from '@/components/News'
 import NewsSingle from '@/components/NewsSingle'
+import AttendanceList from '@/components/AttendanceList'
 
 import Login from '@/components/Login'
+import Register from '@/components/Register'
 
 
 
@@ -33,6 +35,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/courses',
@@ -98,6 +105,11 @@ export default new Router({
       path: '/news/:hash',
       name: 'newsSingle',
       component: NewsSingle
+    },
+    {
+      path: '/attendance/',
+      name: 'attendance',
+      component: AttendanceList
     }
   ]
 })

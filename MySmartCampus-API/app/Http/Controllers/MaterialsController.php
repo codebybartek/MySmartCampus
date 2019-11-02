@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Material;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,8 +19,9 @@ class MaterialsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $courses = $user::with('courses')->first()->courses;
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
+        $courses = $user->courses;
 
         $courses = collect($courses);
 

@@ -75,7 +75,7 @@
             console.log(this.activity);
         }.bind(this))
         .catch((error)=>{
-          this.$router.push('/login'); 
+          //this.$router.push('/login'); 
         });
       },
       closeBtn(){

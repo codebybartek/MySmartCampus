@@ -40,8 +40,29 @@ Route::group(['middleware' => ['ability:professor']], function()
     Route::get('user', 'JwtAuthenticateController@index');
 });
 
+Route::group(['middleware' => ['ability:user|professor']], function()
+{
+    Route::get('courses', 'CoursesController@index');
+    Route::get('groups', 'GroupsController@index');
+    Route::get('activities', 'ActivitiesController@index');
+    Route::get('students', 'StudentsController@index');
+    Route::get('recurrences', 'RecurrenceController@index');
+    Route::get('attandancelist', 'AttandanceListController@index');
+    Route::get('activitiesfree', 'ActivitiesFreeController@index');
+    Route::get('professors', 'ProfessorsAdminController@index');
+    Route::get('subjects', 'SubjectsController@index');
+    Route::get('studentsgroup', 'StudentsGroupController@index');
+    Route::get('news', 'NewsController@index');
+    Route::get('materials', 'MaterialsController@index');
+    Route::get('grades', 'GradesController@index');
+    Route::get('exams', 'ExamsController@index');
+    Route::get('home', 'HomeController@index');
+    Route::get('user', 'JwtAuthenticateController@index');
+});
+
 // Authentication route
 Route::post('login', 'JwtAuthenticateController@authenticate');
+Route::post('register', 'JwtAuthenticateController@register');
 
 
 

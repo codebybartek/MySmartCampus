@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use App\Http\Resources\Activities as ActivityResources;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +18,9 @@ class ActivitiesController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $courses = $user::with('courses')->first()->courses;
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
+        $courses = $user->courses;
 
 
         $activitiesAll = [];

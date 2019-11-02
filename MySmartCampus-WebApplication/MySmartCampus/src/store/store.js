@@ -6,8 +6,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
      name: '',
+     role: '',
      token: null,
-     serverUrl: 'http://vps740401.ovh.net/api',
+     serverUrl: 'http://127.0.0.1:8000/api',
      activities: [],
      course: '',
      selectedDate: ""
@@ -16,6 +17,9 @@ export default new Vuex.Store({
     	getName(state){
     		return state.name;
     	},
+      getRole(state){
+        return state.role;
+      },
       getToken(state){
           return state.token;
       },
@@ -33,6 +37,9 @@ export default new Vuex.Store({
   	setName(state, payload){
   		state.name = payload.name;
   	},
+    setRole(state, payload){
+      state.role = payload.role;
+    },
     setToken(state, payload){
         state.token = payload.token;
     },

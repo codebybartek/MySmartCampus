@@ -4,7 +4,8 @@
     <About />
     <Tabs :dataAll=dataAll />
     <Cards />
-    <Info/>
+    <Info />
+    <Checkattendance />
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import Tabs from '@/components/parts/Tabs'
 import About from '@/components/parts/About'
 import Cards from '@/components/parts/Cards'
 import Info from '@/components/parts/Info'
+import Checkattendance from '@/components/parts/Checkattendance'
 
 //import Courses from '@/components/Courses'
 
@@ -27,7 +29,8 @@ export default {
     Tabs,
     About,
     Cards,
-    Info
+    Info,
+    Checkattendance
   },
   data () {
     return {

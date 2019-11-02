@@ -27,14 +27,14 @@
               </ul>
               <a class="button_more" v-on:click="showSingle(material)" >More <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
 
-              <a class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+              <a v-if="is_professor" class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
             </article>
           </slide>
         </carousel-3d>
         </section>
         <div class="col-12 navigation_buttons">
           <ul>
-            <li class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Material <i class="fa fa-plus" aria-hidden="true"></i></a></li>
+            <li v-if="is_professor" class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Material <i class="fa fa-plus" aria-hidden="true"></i></a></li>
           </ul>
        </div>
       </div>
@@ -66,11 +66,15 @@ export default {
       showSingleContent: false,
       showAddFormContent: false,
       height: 0,
-      was_changed: false
+      was_changed: false,
+      is_professor: false
     }
   },
   methods: {
     getmaterials(){
+      if(window.$cookies.get('user_role') == "professor"){
+        this.is_professor = true;
+      }
       axios.get(this.$store.getters.getUrl + '/materials')
       .then(function (response) {
           this.materials = response.data.data;

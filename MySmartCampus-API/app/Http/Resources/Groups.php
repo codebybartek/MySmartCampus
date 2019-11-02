@@ -52,8 +52,9 @@ class Groups extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'hash' => $this->hash,
             'students' => $students,
-            'professor' => $professors[0]
+            'professor' => $professors
         ];
     }
 }

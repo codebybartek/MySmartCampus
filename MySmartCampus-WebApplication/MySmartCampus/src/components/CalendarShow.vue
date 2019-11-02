@@ -84,8 +84,8 @@ export default {
     
   },
   created: function () {
-    if(!this.$store.getters.getToken){
-      this.$router.push('/login'); 
+    if(!window.$cookies.get('token')){
+      //this.$router.push('/login'); 
     }
   }
 };

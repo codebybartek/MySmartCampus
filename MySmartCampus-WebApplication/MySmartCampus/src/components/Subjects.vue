@@ -1,7 +1,7 @@
 <template>
    <div class="container navbar-offset-top">
       <Subject class="single_hidden" v-if="showSingleContent" v-bind:class="{show_single_content: showSingleContent}" :subject_props="subject_props" v-on:closeSingleContent="closeSingleContent()" @setAlert="setAlert"/>
-      <AddSubject class="single_hidden" v-if="showAddFormContent" v-bind:class="{show_add_form_content: showAddFormContent}" v-on:closeSingleContent="closeSingleContent()" @setAlert="setAlert"/>
+      <AddSubject class="single_hidden" v-if="showAddFormContent" v-bind:class="{show_add_form_content: showAddFormContent}" v-on:closeSingleContent="closeSingleContent()" @setAlert="setAlert" />
       <div class="row">
         <section class="col-12 section_header">
           <h1>Subjects</h1>
@@ -19,18 +19,18 @@
                   </li>
                   <router-link v-on:click="setActivities(subject.courses)" v-if="subject.courses.length > 2" class="more" :to="'/courses'">More Courses <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
               </ul>
-              <a v-on:click="deleteSubject(subject.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+              <a v-if="is_professor" v-on:click="deleteSubject(subject.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
 
               <a class="button_more" v-on:click="showSingle(subject)" >More <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
 
-              <a class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+              <a v-if="is_professor" class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
             </article>
           </slide>
         </carousel-3d>
         </section>
         <div class="col-12 navigation_buttons">
           <ul>
-              <li class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Subject <i class="fa fa-plus" aria-hidden="true"></i></a></li>
+              <li v-if="is_professor" class="button_normal_white"><a class="nav-button" v-on:click="addFormContent()">Add Subject <i class="fa fa-plus" aria-hidden="true"></i></a></li>
           </ul>
        </div>
       </div>
@@ -63,11 +63,15 @@ export default {
       article_height: 'auto',
       showAddFormContent: false,
       height: 0,
-      was_changed: false
+      was_changed: false,
+      is_professor: false
     }
   },
   methods: {
     getSubjects(){
+      if(window.$cookies.get('user_role') == "professor"){
+        this.is_professor = true;
+      }
       axios.get(this.$store.getters.getUrl + '/subjects')
       .then(function (response) {
           this.subjects = response.data.data;

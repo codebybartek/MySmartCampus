@@ -1,6 +1,6 @@
 <template>
   <div class="w100 banner visible">
-    <agile @afterChange="writeLetters(true)" :fade="true" :navButtons="false" :dots="false" ref="carousel">
+    <agile @afterChange="writeLetters(1)" :fade="true" :navButtons="false" :dots="false" ref="carousel">
       <div class="slide">
         <img src="../../assets/banner.jpg" alt="MySmartCampuse-Banner">
          <section class="banner_content">
@@ -39,26 +39,28 @@ export default {
     return {
       banner_text: '',
       i: 0,
-      w: 0
+      w: 0,
+      time_out: null
     }
   },
   methods: {
     writeLetters(started){
-      if(started){
+      if(started === 1){
         this.banner_text = '';
         this.i = 0;
         this.w = this.$refs.carousel.getCurrentSlide();
+        clearTimeout(this.time_out);
       }
       let txt = ['University Management System, the place where you manage all your student work. Start now and have everything in one smart application.', 'In convenient and modern way!']; 
       if (this.i < txt[this.w].length) {
         this.banner_text += txt[this.w].charAt(this.i);
         this.i++;
-        setTimeout(this.writeLetters, 150);
+        this.time_out = setTimeout(this.writeLetters, 70);
       }
     },
   },
   created: function(){
-    this.writeLetters(false);
+    this.writeLetters(0);
   }
 }
 

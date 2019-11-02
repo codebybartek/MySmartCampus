@@ -43,6 +43,7 @@
     methods: {
       onImageChange(e){
           this.material.attachment = e.target.files[0];
+          console.log(this.material.attachment);
       },
       addMaterial(){
         event.preventDefault();
@@ -87,7 +88,7 @@
 
     },
     created: function(){
-      if(window.$cookies.get('token')){
+      if(window.$cookies.get('token') || window.$cookies.get('user_role') != "professor"){
        this.getActivities();
       }else{
         this.$router.push('/login'); 

@@ -12,12 +12,25 @@
             {{course.name}}
           </option>                                                   
         </select>
-        <input type="file" v-on:change="onImageChange">
+        <picture-input 
+          ref="pictureInput" 
+          @change="onImageChange" 
+          width="400" 
+          height="400" 
+          crop= true
+          margin="16" 
+          accept="image/jpeg,image/png" 
+          size="10" 
+          buttonClass="btn"
+          :customStrings="{
+            upload: '<h1>Uploading</h1>',
+            drag: 'Add a picture'
+          }">
+        </picture-input>
         <button class="u-full-width add_button" v-on:click="addNews()" >Add news</button>
       </form>
       <div class="popup" v-bind:class="{show_pop: errors.length > 0 || success}">
-        <span class="error" v-for="error in errors">{{error}}</span>
-        <span class="success">{{success}}</span>             
+        <span class="error" v-for="error in errors">{{error}}</span> 
       </div>
     </div>
   </div>
@@ -25,6 +38,10 @@
 
 <script>
   import axios from 'axios';
+
+  import PictureInput from 'vue-picture-input'
+
+
   export default {
     name: 'AddNews',
     data() {
@@ -36,13 +53,16 @@
           image: null
         },
         courses: [],
-        errors: [],
-        success: ''
+        errors: []
       }
     },
+    components: {
+      PictureInput
+    },
     methods: {
-      onImageChange(e){
-          this.news.image = e.target.files[0];
+      onImageChange(){
+          this.news.image = this.$refs.pictureInput.file;
+          console.log(this.news.image);
       },
       addNews(){
         event.preventDefault();
@@ -61,7 +81,8 @@
         console.log(news);
         if(this.errors.length == 0){
           axios.post(this.$store.getters.getUrl + '/news', news, config).then((response) =>{
-            this.success = response.data['created'];
+            let alert = {content: response.data['created'], alertClass: "success"};
+            this.$emit('setAlert', alert);
           })
           .catch(function(error){
             popup('You were logged out');
@@ -70,7 +91,7 @@
         } 
       },
       getCourses(){
-        axios.get(this.$store.getters.getUrl + '/courses/')
+        axios.get(this.$store.getters.getUrl + '/courses')
         .then(function (response) {
             this.courses = response.data.data;
         }.bind(this))
@@ -88,7 +109,7 @@
 
     },
     created: function(){
-      if(window.$cookies.get('token')){
+      if(window.$cookies.get('token') || window.$cookies.get('user_role') != "professor"){
        this.getCourses();
       }else{
         this.$router.push('/login'); 
@@ -114,7 +135,7 @@ h1{
   padding-top: 75px;
   padding-left: 30px;
   padding-right: 30px;
-  position: fixed;
+  position: absolute;
   min-height: 100vh;
   width: 100%;
   margin: 0 auto;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Subject;
 use App\Course;
@@ -19,9 +20,10 @@ class SubjectsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
 
-        return SubjectResource::collection($user::with('subjects')->first()->subjects->unique());
+        return SubjectResource::collection($user->subjects->unique());
     }
 
     /**

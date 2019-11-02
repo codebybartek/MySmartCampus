@@ -20,9 +20,10 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
 
-        return CoursesResource::collection($user::with('courses')->first()->courses);
+        return CoursesResource::collection($user->courses);
     }
 
     /**

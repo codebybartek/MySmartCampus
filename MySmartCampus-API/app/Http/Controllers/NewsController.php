@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\News;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 use App\Http\Resources\News as NewsResources;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +21,9 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $courses = $user::with('courses')->first()->courses;
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
+        $courses = $user->courses;
 
         $newsAll = [];
         $w = 0;
@@ -54,8 +58,15 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $imageName = $request->image->getClientOriginalName();
-        $request->image->move(public_path('images'), $imageName);
+        /*$imageName = $request->image->getClientOriginalName();
+        $request->image->move(public_path('images'), $imageName);*/
+
+        $image       = $request->file('image');
+        $imageName    = $image->getClientOriginalName();
+
+        $image_resize = Image::make($image->getRealPath());
+        $image_resize->resize(400, 400);
+        $image_resize->save(public_path('images/' .$imageName));
 
         $news = new News();
         $news->title = $request->title;

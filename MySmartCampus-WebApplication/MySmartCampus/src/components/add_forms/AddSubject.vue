@@ -56,7 +56,7 @@
 
     },
     created: function(){
-      if(window.$cookies.get('token')){
+      if(window.$cookies.get('token') || window.$cookies.get('user_role') != "professor"){
        //
       }else{
         this.$router.push('/login'); 

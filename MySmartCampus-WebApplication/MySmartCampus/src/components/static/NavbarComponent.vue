@@ -28,7 +28,14 @@
             </div>
             <a class="search_btn" v-on:click="showSearch()"><i class="fa fa-search" aria-hidden="true" v-show="!searchForm"></i><i class="fa fa-times" aria-hidden="true" v-show="searchForm"></i></router-link></a>
           </li>
-          <li><router-link to="/"><i class="fa fa-user-o" aria-hidden="true"></i></router-link></li>
+          <li class="user">
+            <i class="fa fa-user-o" aria-hidden="true"></i>
+            <div class="profile_info">
+              <span class="user_data"><img src="../../assets/user.jpg" alt="user image">{{user_name}}</span>
+              <span class="edit_account"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit account</span>
+              <span @click="logout()" class="log_out"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</span>
+            </div>
+          </li>
         </ul>
       </aside>
     </div>
@@ -46,7 +53,9 @@ export default {
       opacity: 1,
       lastScrollPosition: 0,
       fixedTop: false,
-      searchForm: false
+      searchForm: false,
+      user_role: '',
+      user_name: ''
     }
   },
   methods: {
@@ -84,10 +93,19 @@ export default {
 		    .catch((error)=>{
 		      this.$router.push('/login'); 
 		    });
-	    }
+	  },
+    logout(){
+      window.$cookies.remove("token");
+      window.$cookies.remove("user_name");
+      window.$cookies.remove("user_role");
+      localStorage.clear();
+      this.$router.push('/login'); 
+    }
   },
   created () {
     window.addEventListener('scroll', this.handleScroll);
+    this.user_name = window.$cookies.get('user_name');
+    this.user_role = window.$cookies.get('user_role');
   },
 }
 </script>
@@ -227,7 +245,6 @@ a {
   }
 
   a{
-    transition: 1s;
 
     &:hover{
       color: $basic_blue;
@@ -238,11 +255,71 @@ a {
     cursor: pointer;
   }
 
+  .user{
+    z-index: 9999;
+    i{
+      cursor: pointer;
+
+      &:hover{
+        color: $basic_blue;
+      }
+    }
+
+    .profile_info{
+      display: none;
+      font-size: $basic_small;
+      position: absolute;
+      right: 5px;
+      width: 130px;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 15px;
+
+      .edit_account{
+        cursor: pointer;
+
+        &:hover{
+          color: #f5c242;
+        }
+      }
+
+      .log_out{
+        cursor: pointer;
+
+        &:hover{
+          color: $basic_red;
+        }
+      }
+
+      span{
+        display: block;
+        width: 100%;
+
+        img{
+          max-width: 50px;
+          border-radius: 100%;
+          padding-right: 10px;
+          padding-left: 10px;
+          margin-bottom: 10px;
+          margin-top: 5px;
+        }  
+      }
+
+      &:hover{
+        display: block;
+      }
+    }
+
+    &:hover > .profile_info{
+      display: block;
+    }
+
+  }
+
   .search_form{
     display: flex;
     position: absolute;
     align-items: center;
-    left: -182px;
+    left: -237px;
     top: -3px;
     z-index: 999;
     transition: 1s;
@@ -463,7 +540,7 @@ a {
 }
 #burger{
   display: inline-block;
-  top: 14px;
+  top: 12px;
   right: 15px;
   position: absolute;
 }
@@ -557,10 +634,9 @@ a {
 	      transition-delay: 1.1s;
 	      opacity: 1;
 	      background: #1d1d1d;
-	      padding-bottom: 10px;
 	    }
 	    &:nth-child(6){
-	      transition-delay: 1.1s;
+	      transition-delay: 1.3s;
 	      opacity: 1;
 	      background: #1d1d1d;
 	      padding-bottom: 10px;

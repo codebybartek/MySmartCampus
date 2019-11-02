@@ -168,6 +168,8 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -230,7 +232,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class
+        'Entrust' => Zizaco\Entrust\EntrustServiceProvider::class,
+        'Image' => Intervention\Image\Facades\Image::class
+
 
     ],
 

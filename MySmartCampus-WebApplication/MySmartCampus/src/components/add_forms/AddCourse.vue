@@ -20,8 +20,7 @@
         <button class="u-full-width add_button" v-on:click="addCourse" >Add course</button>
       </form>
       <div class="popup" v-bind:class="{show_pop: errors.length > 0 || success}">
-        <span class="error" v-for="error in errors">{{error}}</span>
-        <span class="success">{{success}}</span>             
+        <span class="error" v-for="error in errors">{{error}}</span>            
       </div>
     </div>
   </div>
@@ -40,7 +39,6 @@
         },
         groups: [],
         subjects: [],
-        success: '',
         errors: [],
       }
     },
@@ -78,7 +76,8 @@
         }
         if(this.errors.length == 0){
           axios.post(this.$store.getters.getUrl + '/courses', this.course).then((response) =>{
-            this.success = response.data['created'];
+            let alert = {content: response.data['created'], alertClass: "success"};
+            this.$emit('setAlert', alert);
           })
           .catch(function(error){
             popup('You were logged out');
@@ -96,7 +95,7 @@
 
     },
     created: function(){
-      if(window.$cookies.get('token')){
+      if(window.$cookies.get('token') || window.$cookies.get('user_role') != "professor"){
        this.getGroups();
        this.getSubjects();
       }else{

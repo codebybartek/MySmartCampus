@@ -1,6 +1,6 @@
 <template>
   <div class="w100 visible">
-    <div class="row no-margin">
+    <div v-if='isAdmin' class="row no-margin">
       <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
         <img src="../../assets/subjects.png" alt="subjects">
         <div class="tab_content">
@@ -74,6 +74,45 @@
         </div>
       </article>
     </div>
+
+    <div v-else class="row no-margin">
+      <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
+        <img src="../../assets/courses.png" alt="courses">
+        <div class="tab_content">
+          <h3>Manage courses</h3>
+          <ul>
+            <li v-for="(course, index) in dataAll.courses" v-if="index<=5">
+              <router-link :to="'/course/' + course.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{course.name}}</router-link>
+            </li>
+          </ul>
+          <router-link v-if="dataAll.courses && dataAll.courses.length > 5" class="more" :to="'/courses'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
+        </div>
+      </article>
+      <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
+        <img src="../../assets/activities.png" alt="activities">
+        <div class="tab_content">
+          <h3>Manage activities</h3>
+          <ul>
+            <li v-for="(activity, index) in dataAll.activities" v-if="index <= 5">
+              <router-link :to="'/activity/' + activity.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{activity.title}}</router-link>
+            </li>
+          </ul>
+          <router-link v-if="dataAll.activities && dataAll.activities.length > 5" class="more" :to="'/activities'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
+        </div>
+      </article>
+      <article class="col-xs-12 col-sm-6 col-md-4 tab_article no-padding">
+        <img src="../../assets/exams.png" alt="exams">
+        <div class="tab_content">
+          <h3>Manage exams</h3>
+          <ul>
+            <li v-for="(exam, index) in dataAll.exams" v-if="index <= 5">
+              <router-link :to="'/exam/' + exam.hash"><i class="fa fa-graduation-cap" aria-hidden="true"></i> {{exam.title}}</router-link>
+            </li>
+          </ul>
+          <router-link v-if="dataAll.exams && dataAll.exams.length > 5" class="more" :to="'/exams'">More <i class="fa fa-angle-double-right" aria-hidden="true"></i></router-link>
+        </div>
+      </article>
+    </div>
   </div>
 </template>
 
@@ -84,10 +123,16 @@
     props: ['dataAll'],
     data() {
       return {
+        isAdmin: false,
       }
     },
     methods: {
       
+    },
+    created: function(){
+      if(window.$cookies.get("user_role") === "professor"){
+        this.isAdmin = true;
+      }        
     }
   }
 </script>
@@ -235,7 +280,8 @@
 
   &:hover ul li{
     transform: scale(1);
-
+    text-align: center;
+    
     a i{
       transform: rotate(0deg);
     }

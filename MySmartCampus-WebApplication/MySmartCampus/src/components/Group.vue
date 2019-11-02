@@ -94,7 +94,6 @@ h1{
 
 .single_content{
   padding-top: 75px;
-  position: absolute;
   min-height: 100vh;
   width: 100%;
   top: 0;

@@ -42,21 +42,18 @@ class AttandanceListController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $activity = Activity::all()->where('activity_id', $request->activity_id)->first();
+        $activity = Activity::all()->where('id', $request->activity_id)->first();
+        if($activity->checked == false) {
             $activity->checked = true;
             $activity->save();
-
-            AttendanceList::create($request->all());
-
-            return response()->json([
-                'created' => 'Student was added to attandance list'
-            ], 201);
-        }else{
-            return "unauthorized";
         }
+
+        AttendanceList::create($request->all());
+
+        return response()->json([
+            'created' => 'Student/s was added to attandance list'
+        ], 201);
+
     }
 
     /**

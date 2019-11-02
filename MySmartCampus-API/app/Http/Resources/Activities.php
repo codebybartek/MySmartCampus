@@ -48,6 +48,7 @@ class Activities extends JsonResource
 
         $activity = Activity::all()->where('id', $this->id)->first();
 
+        $courses = $activity->courses;
         return [
             'id' => $this->id,
             'activityDate' => $this->activityDate,
@@ -59,6 +60,7 @@ class Activities extends JsonResource
             'materials' => $activity->materials,
             'exams' => $activity->exams,
             'students' => $students,
+            'course' => $courses[0]
         ];
     }
 }

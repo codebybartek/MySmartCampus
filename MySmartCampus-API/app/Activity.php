@@ -19,4 +19,8 @@ class Activity extends Model
     public function exams() {
         return $this->belongsToMany('App\Exam', 'activity_exam');
     }
+
+    public function courses() {
+        return $this->belongsToMany('App\Course', 'activity_course');
+    }
 }

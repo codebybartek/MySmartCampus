@@ -12,6 +12,10 @@
               <span class="error" v-for="error in errors">{{error}}</span>
               <button class="u-full-width button-primary" type="submit" v-on:click="login">Login</button>
           </div>
+          <div class="buttons_additional">
+            <router-link class="register_button" to="/register">Register <i class="fa fa-plus" aria-hidden="true"></i></router-link>
+            <router-link class="google_button" to="/register">Login with Google <i class="fa fa-google" aria-hidden="true"></i></router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -44,19 +48,19 @@
         }
         
        axios.post(this.$store.getters.getUrl + '/login', this.credential).then((response) =>{
-          console.log(response.data.token);
-          this.$store.commit("setToken", {
-            token: response.data.token
-          })
           let currentDateWithFormat =  new Date().getTime();
           localStorage.setItem('Expiration', currentDateWithFormat);
-          window.$cookies.set("token",response.data.token,"10MIN")
+          window.$cookies.set("token",response.data.token,"10MIN");
+          window.$cookies.set("user_name",response.data.user_name,"10MIN")
+          window.$cookies.set("user_role",response.data.user_role,"10MIN")
           this.$router.push('/');
+          let alert = null;
+          this.$emit('setAlert', alert);
           this.$emit('toggleNavbar'); 
         })
         .catch(function(error){
           this.errors = [];
-          this.errors.push(error);
+          this.errors.push(error.response.data.error);
         }.bind(this));
       }
     },
@@ -123,12 +127,14 @@ h1, h2 {
       font-weight: 300;
       color: #fff!important;
       font-size: $basic;
-      margin-bottom: 30px;
+      margin-bottom: 15px;
       outline: none;
     }
+
     #email:focus, #password:focus, #email:active, #password:active{
       border-color: $basic_blue;
     }
+
     .button-primary{
       border: 1px solid $basic_color;
       background-color: transparent;
@@ -139,22 +145,59 @@ h1, h2 {
       cursor: pointer;
       color: $basic_color;
     }
+
     .button-primary:focus, .button-primary:active, .button-primary:hover{
       border-color: $basic_green;
       color: $basic_green;
     }
   }
+
+  .buttons_additional{
+    .register_button, .google_button{
+      color: $basic_color;
+      padding: 10px 15px;
+      margin: 15px;
+      display: inline-block;
+      min-width: 200px;
+      position: relative;
+      text-indent: 999;
+
+      &:before{
+        height: 100%;
+        width: 0;
+        position: absolute;
+        content: "";
+        background: rgba(0, 0, 0, 0.4);
+        display: block;
+        left: 0;
+        top: 0;
+      }
+
+    }
+
+    .register_button:hover, .google_button:hover{
+      &:before{
+        animation-name: showButton;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;  
+      }
+    }
+
+    .register_button{
+      background-color: $basic_green;
+    }
+
+    .google_button{
+      background-color: $basic_grey;
+    }
+  }
 }
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-  a {
-    color: #42b983;
-  }
+
+  /*ANIMATIONS*/
+
+@-webkit-keyframes showButton {
+  from {width: 0}
+  to {width: 100%}
+}
 
 </style>

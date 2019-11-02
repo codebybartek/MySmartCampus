@@ -29,9 +29,11 @@ export default {
       this.showNavbar = !this.showNavbar;
     },
     setAlert(alert_param){
-    console.log(alert_param);
       this.alert = alert_param;
     }
+  },
+  created: function () {
+      this.alert = null;
   }
 }
 </script>
@@ -54,6 +56,17 @@ body{
 }
 .show_pop{
   transform: scale(1);
+}
+select, input{
+  color: #fff;
+  border: 1px solid #fff;
+  background: transparent;
+  padding: 7px 15px;
+  display: inline-block;
+  width: 100%;
+}
+select option {
+  color: #1d1d1d;
 }
 
 .alert{
@@ -163,7 +176,7 @@ select:-webkit-autofill:focus {
 }
 
 .button_normal_white{
-  
+  cursor: pointer;
 
   a{
     border: 2px solid $basic_color;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\Groups as GroupsResource;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,9 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        $groups= $user::with('groups')->first()->groups;
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
+        $groups= $user->groups;
 
         return GroupsResource::collection($groups);
     }
@@ -57,12 +58,12 @@ class GroupsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  String  $hash
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($hash)
+    public function show($id)
     {
-        $groups = Group::all()->where('hash', $hash);
+        $groups = Group::all()->where('id', $id);
         return GroupsResource::collection($groups);
     }
 

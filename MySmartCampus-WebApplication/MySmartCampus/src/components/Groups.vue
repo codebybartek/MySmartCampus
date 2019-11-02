@@ -17,16 +17,16 @@
                     </router-link>
                   </li>
               </ul>
-              <a v-on:click="deletegroup(group.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+              <a v-if="is_professor" v-on:click="deletegroup(group.id)" class="button_delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
               <a class="button_more" v-on:click="showSingle(group)" >More <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-              <a class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+              <a v-if="is_professor" class="button_edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
             </article>
           </slide>
         </carousel-3d>
         </section>
         <div class="col-12 navigation_buttons">
           <ul>
-              <li><router-link class="nav-button" :to="'/groups/add/' + subject_id">Add group</router-link></li>
+              <li v-if="is_professor"><router-link class="nav-button" :to="'/groups/add/' + subject_id">Add group</router-link></li>
           </ul>
        </div>
       </div>
@@ -56,11 +56,15 @@ export default {
       article_height: 'auto',
       showSingleContent: false,
       height: 0,
-      was_changed: false
+      was_changed: false,
+      is_professor: false
     }
   },
   methods: {
     getGroups(){
+      if(window.$cookies.get('user_role') == "professor"){
+        this.is_professor = true;
+      }
       axios.get(this.$store.getters.getUrl + '/groups/')
       .then(function (response) {
           this.groups = response.data.data;
