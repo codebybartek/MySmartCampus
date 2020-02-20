@@ -2,17 +2,20 @@ package com.example.mysmartcampus.Models;
 
 public class Student {
 
+    private Integer id;
     private String name;
     private String email;
-    private String index;
+    private String hash;
+    //private String index;
     private String tagId;
     private String tagDate;
     public boolean status;
 
-    public Student(String name, String email, String index, String tagId, boolean status, String tagDate) {
+    public Student(Integer id, String name, String email, String hash, String tagId, boolean status, String tagDate) {
+        this.id = id;
         this.name = name;
         this.email = email;
-        this.index = index;
+        this.hash = hash;
         this.status = status;
         this.tagId = tagId;
         this.tagDate = tagDate;
@@ -20,6 +23,10 @@ public class Student {
 
     public void setTagId(String tagId) {
         tagId = tagId;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getName() {
@@ -30,9 +37,7 @@ public class Student {
         return email;
     }
 
-    public String getIndex() {
-        return index;
-    }
+    public String getHash() { return hash; }
 
     public String getTagId() {
         return tagId;

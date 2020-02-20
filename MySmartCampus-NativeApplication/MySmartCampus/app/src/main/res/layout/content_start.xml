@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:gravity="left"
+        android:layout_marginTop="-30dp"
+        app:srcCompat="@drawable/university"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+    android:id="@+id/bannerHeader"
+    android:layout_width="wrap_content"
+    android:layout_height="100dp"
+    android:layout_marginTop="90dp"
+    android:gravity="center_horizontal"
+    android:layout_centerHorizontal="true"
+    android:text="MySmartCapmus - e-managemant sarvice"
+    android:textSize="30sp"
+    android:textColor="#f5f5f5"
+    tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/bannerSubheader"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="For professors and studants"
+        android:textSize="23sp"
+        android:layout_below="@id/bannerHeader"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/informationHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="About service"
+        android:textSize="35sp"
+        android:layout_below="@id/banner"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/informationText"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="MySmartCampus is an application that can be use both by students and professors. It allow to manage everything in easy and convenient in two ways: mobile application and web-application. Take advantage of service and start now. This could make your work easier and more secure"
+        android:textSize="17sp"
+        android:layout_below="@id/informationHeader"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/informationText2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="Professor can chack attandance list using NFC students cards and manage all courses, groups, and activities."
+        android:textSize="17sp"
+        android:layout_below="@id/informationText"
+        tools:ignore="MissingConstraints" />
+
+
+    <LinearLayout
+        android:id="@+id/header_list_c"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#0e0ed7"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/informationText2"
+        android:weightSum="100">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_weight="33.3"
+            android:gravity="center"
+            android:text="Latest courses: "
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/coursesList"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_below="@id/header_list_c"
+        android:weightSum="100">
+        <ListView
+            android:id="@+id/listViewCourses"
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+
+
+</RelativeLayout>

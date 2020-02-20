@@ -10,41 +10,22 @@
     <TextView
         android:gravity="center"
         android:textAlignment="center"
-        android:text="Exam tittle"
+        android:text="Exam id"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/examTitle"
-        android:layout_weight="33.3"/>
+        android:id="@+id/examId"
+        android:layout_weight="50"/>
 
     <TextView
         android:gravity="center"
         android:textAlignment="center"
-        android:text="Exam date"
+        android:text="Exam tittle"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/examDate"
-        android:layout_weight="33.3"/>
+        android:id="@+id/examTitle"
+        android:layout_weight="50"/>
 
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3">
 
-        <TextView
-            android:gravity="center"
-            android:text="Grade"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/grade"/>
-
-        <TextView
-            android:gravity="center"
-            android:text="Student Index"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:id="@+id/index" />
-    </LinearLayout>
 
 </LinearLayout>

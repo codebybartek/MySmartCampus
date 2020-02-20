@@ -21,4 +21,8 @@ class Course extends Model
         return $this->belongsToMany('App\News', 'course_news');
     }
 
+     public function subject() {
+        return $this->belongsToMany('App\Subject', 'course_user');
+    }
+
 }

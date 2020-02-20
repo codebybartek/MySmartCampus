@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Activity;
 use App\Http\Resources\Activities as ActivityResources;
+use App\Http\Resources\ActivitiesCurrent as ActivityResourcesCurrent;
 use App\User;
+use App\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +22,19 @@ class ActivitiesController extends Controller
     {
         $AuthUser = Auth::user();
         $user = User::all()->where('id', $AuthUser->id)->first();
-        $courses = $user->courses;
+
+        if($user->roles->first()->name == "professor"){
+            $courses = $user->courses;
+        }else{
+            $courses = [];
+            $groupId = DB::table('group_user')->where('user_id', $user->id)->pluck('group_id')->first();
+            $coursesTemp = Course::all()->where('group_id', $groupId);
+            $i = 0;
+            foreach ($coursesTemp as $key => $value) {
+                $courses[$i] = $value;
+                $i++;
+            }
+        }
 
 
         $activitiesAll = [];
@@ -36,6 +50,35 @@ class ActivitiesController extends Controller
         $activities = collect($activitiesAll);
 
         return ActivityResources::collection($activities);
+    }
+
+    /**
+     * Display a listing of the resource in a current day.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function currentActivities()
+    {
+        $AuthUser = Auth::user();
+        $user = User::all()->where('id', $AuthUser->id)->first();
+        $courses = $user->courses;
+
+
+        $activitiesAll = [];
+        $w = 0;
+        for($i = 0; $i < count($courses); $i++){
+            $activities = $courses[$i]->activities;
+            for($j = 0; $j < count($activities); $j++) {
+            	if(explode(' ', $activities[$j]['activityDate'])[0] == date('Y-m-d')){
+                	$activitiesAll[$w]=  $activities[$j];
+                	$w++;
+            	}
+            }
+        }
+
+        $activities = collect($activitiesAll);
+
+        return ActivityResourcesCurrent::collection($activities);
     }
 
     /**
@@ -108,18 +151,7 @@ class ActivitiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $activity = Activity::where('activity_id', $id)->first();
-            $activity->update($request->all());
-
-            return response()->json([
-                'updated' => 'Activity was added'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**

@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class JwtAuthenticateController extends Controller
 {
 
     public function index()
     {
-        return response()->json(['auth' => Auth::user()]);
+        return response()->json(['data' => Auth::user()]);
     }
 
     public function register(Request $request)
@@ -36,8 +37,16 @@ class JwtAuthenticateController extends Controller
             return response()->json($val->errors()->toJson(), 400);
         }
 
-        $imageName = $request->image->getClientOriginalName();
-        $request->image->move(public_path('images/admin'), $imageName);
+        /*$image       = $request->image;
+        $imageName    = $image->getClientOriginalName();*/
+
+        $image       = $request->file('image');
+        $imageName    = $image->getClientOriginalName();
+
+        $image_resize = Image::make($image->getRealPath());
+        $image_resize->resize(30, 30);
+        $image_resize->save('images/admin/'.$imageName);
+
 
 
         $user = User::create([
@@ -46,7 +55,7 @@ class JwtAuthenticateController extends Controller
             'password' => Hash::make($request->password),
             'tagId' => $request->tagId,
             'hash' => md5(time()).rand(0, 999),
-            'photo' => 'http://'.request()->getHost().':8000/images/'.$imageName
+            'photo' => 'http://'.request()->getHost().'/images/admin/'.$imageName
         ]);
 
         if($request->role == 1){
@@ -68,7 +77,7 @@ class JwtAuthenticateController extends Controller
         try {
             // verify the credentials and create a token for the user
             if (!$token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->json(['error' => 'Your credentials are incorrect!'], 401);
             }
         } catch (JWTException $e) {
             // something went wrong
@@ -77,12 +86,39 @@ class JwtAuthenticateController extends Controller
 
         // if no errors are encountered we can return a JWT with user role
 
-        $professor = User::all()->where('email', $credentials['email'])->first();
-        $user_name = $professor->name;
-        $user_role = $professor->role->first()->name;
+        $user = User::all()->where('email', $credentials['email'])->first();
+        $user_name = $user->name;
+        $user_picture = $user->photo;
+        $user_role = $user->role->first()->name;
 
-        return response()->json(compact(['token', 'user_name', 'user_role']));
+        if($request->mobile != null){
+            $user->mobile_token = Hash::make($request->mobile); 
+            $user->save();
+        }
+
+        return response()->json(compact(['token', 'user_name', 'user_role', 'user_picture']));
         //return response()->json(compact('token'));
+    }
+
+    public function authenticateMobileApp(Request $request)
+    {
+        // grab credentials from the request
+        $credentials = $request->only('tag', 'mobile_token');
+
+        $token = Hash::make($credentials['mobile_token']);
+
+       $user=User::where('tagId','=', $credentials['tag'])->first();
+
+        if(Hash::check($credentials['mobile_token'], $user->mobile_token)) {
+
+            //Try to add token
+            if (!$token=JWTAuth::fromUser($user)) {
+                return response()->json(['error' => 'invalid_credentials'], 401);
+            }
+
+        }
+        return response()->json(compact('token'));
+
     }
 
     public function createRole(Request $request)

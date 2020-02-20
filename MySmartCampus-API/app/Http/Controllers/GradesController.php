@@ -8,6 +8,7 @@ use App\Grade;
 use App\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GradesController extends Controller
 {
@@ -18,7 +19,9 @@ class GradesController extends Controller
      */
     public function index()
     {
-      return "GRades";
+
+      $exams = Exam::all();
+      return ['data' => $exams];
     }
 
     /**
@@ -39,17 +42,19 @@ class GradesController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Grade::create($request->all());
 
-            return response()->json([
-                'created' => 'Grade was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $grade = new Grade();
+        $grade->grade_date = $request->grade_date;
+        $grade->exam_id = $request->exam_id;
+        $grade->grade = $request->grade;
+        $grade->user_id = $request->student_id;
+        $grade->hash = md5(time()).rand(0, 999);
+
+        Grade::create($grade->toArray());
+
+        return response()->json([
+            'created' => 'Grade was added'
+        ], 201);
     }
 
     /**
@@ -60,14 +65,11 @@ class GradesController extends Controller
      */
     public function show($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $grade = Grade::all()->where('grade_id', $id);
-            return $grade;
-        }else{
-            return "unauthorized";
-        }
+       /*$activityId = DB::table('activity_exam')->where('exam_id', $id)->first()->pluck('activity_id');
+       $courseId = DB::table('activity_course')->where('activity_id', $activityId)->first()->pluck('course_id');
+       $groupId = Course::all()->where('course_id', $courseID)->first()->pluck('group_id');
+
+       return ['exam_id' => $exam->id, 'exam_name' => $exam->title, 'grades' => GradeResources::collection($grades)];*/
     }
 
     /**
@@ -78,14 +80,7 @@ class GradesController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $grade = Grade::all()->where('grade_id', $id)->first();
-            return $grade;
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -97,22 +92,7 @@ class GradesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $grade = Grade::where('grade_id', $id)->first();
-            $grade->grade = $request->grade;
-            $grade->grade_date = $request->grade_date;
-            $grade->student_id = $request->student_id;
-            $grade->exam_id = $request->exam_id;
-            $grade->save();
-
-            return response()->json([
-                'updated' => 'Grade was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+       //
     }
 
     /**
@@ -123,17 +103,11 @@ class GradesController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $grade = Grade::where('grade_id', $id);
-            $grade->delete();
+        $grade = Grade::where('id', $id);
+        $grade->delete();
 
-            return response()->json([
-                'deleted' => 'Grade was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        return response()->json([
+            'deleted' => 'Grade was deleted'
+        ], 200);
     }
 }

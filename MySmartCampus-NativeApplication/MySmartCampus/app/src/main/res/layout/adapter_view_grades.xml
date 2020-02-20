@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@id/activity_header_list"
+    android:weightSum="100">
+
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Student id"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/index"
+        android:layout_weight="33.3"/>
+
+    <TextView
+        android:gravity="center"
+        android:textAlignment="center"
+        android:text="Student name"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/name"
+        android:layout_weight="33.3"/>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33.3">
+
+        <TextView
+            android:gravity="center"
+            android:text="Grade"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/grade"/>
+
+        <TextView
+            android:gravity="center"
+            android:text="Date"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/date" />
+    </LinearLayout>
+
+</LinearLayout>

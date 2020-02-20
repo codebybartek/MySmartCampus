@@ -23,10 +23,12 @@ class Courses extends JsonResource
     public function toArray($request)
     {
         $course = Course::all()->where('id', $this->id)->first();
+        $subject = $course->subject;
 
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'subject' => $subject->first(),
             'group' => Group::all()->where('id', $this->group_id)->first(),
             'activities' => $course->activities,
             'news' => $course->news

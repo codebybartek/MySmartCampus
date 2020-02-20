@@ -31,7 +31,7 @@ public class StudentsListAdapter extends ArrayAdapter<Student> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String studentaName = getItem(position).getName();
-        String studentIndex = String.valueOf(getItem(position).getIndex());
+        String studentIndex = String.valueOf(getItem(position).getId());
         String studentTag = getItem(position).getTagId();
         String tagDate = getItem(position).getTagDate();
 

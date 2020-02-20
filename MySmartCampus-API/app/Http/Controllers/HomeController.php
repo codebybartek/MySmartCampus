@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Activity;
+use App\Course;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,26 +18,62 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $courses = $user->courses;
-        $activitiesAll = [];
-        $w = 0;
-        for($i = 0; $i < count($courses); $i++){
-            $activities = $courses->get($i)->activities;
-            for($j = 0; $j < count($activities); $j++){
-                $activitiesAll[$w] = $activities->get($j);
-                $w++;
+        if($user->roles->first()->name == "professor"){
+            $courses = $user->courses;
+
+            $activitiesAll = [];
+            $w = 0;
+            for($i = 0; $i < count($courses); $i++){
+                $activities = $courses->get($i)->activities;
+                for($j = 0; $j < count($activities); $j++){
+                    $activitiesAll[$w] = $activities->get($j);
+                    $w++;
+                }
             }
+                $newsAll = [];
+            $w = 0;
+            for($i = 0; $i < count($courses); $i++){
+                $news = $courses->get($i)->news;
+                for($j = 0; $j < count($news); $j++){
+                    $newsAll[$w] = $news->get($j);
+                    $w++;
+                }
+            }
+            
+        }else{
+        	$courses = [];
+            $groupId = DB::table('group_user')->where('user_id', $user->id)->pluck('group_id')->first();
+            $coursesTemp = Course::all()->where('group_id', $groupId);
+            $i = 0;
+            foreach ($coursesTemp as $key => $value) {
+                $courses[$i] = $value;
+                $i++;
+            }
+
+            $activitiesAll = [];
+            $w = 0;
+            for($i = 0; $i < count($courses); $i++){
+                $activities = $courses[$i]->first()->activities;
+                for($j = 0; $j < count($activities); $j++){
+                    $activitiesAll[$w] = $activities->get($j);
+                    $w++;
+                }
+            }
+
+            $newsAll = [];
+            $w = 0;
+            for($i = 0; $i < count($courses); $i++){
+                $news = $courses[$i]->first()->news;
+                for($j = 0; $j < count($news); $j++){
+                    $newsAll[$w] = $news->get($j);
+                    $w++;
+                }
+            }
+        	
+
         }
 
-        $newsAll = [];
-        $w = 0;
-        for($i = 0; $i < count($courses); $i++){
-            $news = $courses->get($i)->news;
-            for($j = 0; $j < count($news); $j++){
-                $newsAll[$w] = $news->get($j);
-                $w++;
-            }
-        }
+  
 
         $materialsAll = [];
         $w = 0;

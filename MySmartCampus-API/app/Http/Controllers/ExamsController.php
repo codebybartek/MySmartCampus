@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Subject;
+use App\Grade;
 use App\Exam;
 use Illuminate\Http\Request;
 use App\Http\Resources\Exams as ExamResources;
+use App\Http\Resources\Grades as GradeResources;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ExamsController extends Controller
 {
@@ -19,11 +22,27 @@ class ExamsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $courses = $user::with('courses')->first()->courses;
+        $courses = $user->courses;
 
         $courses = collect($courses);
 
         return ExamResources::collection($courses);
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showGrades()
+    {
+        $user = Auth::user();
+        $exams = Grade::all()->where('user_id', $user->id);
+
+        //$courses = collect($courses);
+
+        return $exams;
 
     }
 
@@ -45,36 +64,44 @@ class ExamsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Exam::create($request->all());
 
-            return response()->json([
-                'created' => 'Exam was added'
-            ], 201);
-        }else{
-            return "dddd";
-        }
+        $exam = new Exam();
+        $exam->title = $request->title;
+        $exam->hash = md5(time()).rand(0, 999);
+        $exam->save();
+
+        $examId = Exam::all()->where('hash', $exam->hash)->pluck('id')->first();
+
+        DB::table('activity_exam')->insert(
+            ['activity_id' => $request->activity_id, 'exam_id' => $examId]
+        );
+
+        return response()->json([
+            'created' => 'Exam was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  String  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Exam::all()->where('exam_id', $id);
-            return ExamResources::collection($course);
-        }else{
-            return "dddd";
-        }
+        $exam = Exam::all()->where('hash', $hash)->first();
+        $grades = Grade::all()->where('exam_id', $exam->id);
+
+        //Get Group Id
+        $activityId = DB::table('activity_exam')->where('exam_id', $exam->id)->pluck('activity_id')->first();
+        $courseId = DB::table('activity_course')->where('activity_id', $activityId)->pluck('course_id')->first();
+        $groupId = Course::all()->where('id', $courseId)->pluck('group_id')->first();
+
+        $data = ['exam_id' => $exam->id, 'exam_name' => $exam->title, 'group_id' => $groupId, 'grades' => GradeResources::collection($grades)];
+
+        return ['data' => [$data]];
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -84,14 +111,7 @@ class ExamsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $exam = Exam::all()->where('exam_id', $id)->first();
-            return $exam;
-        }else{
-            return "dddd";
-        }
+        //
     }
 
     /**
@@ -103,24 +123,7 @@ class ExamsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $exam = Exam::where('exam_id', $id)->first();
-            $exam->title = $request->title;
-            $exam->questions = $request->questions;
-            $exam->exam_date = $request->exam_date;
-            $exam->isQuiz = $request->isQuiz;
-            $exam->duration = $request->duration;
-            $exam->course_id = $request->course_id;
-            $exam->save();
-
-            return response()->json([
-                'updated' => 'Exam was updated'
-            ], 201);
-        }else{
-            return "dddd";
-        }
+        //
     }
 
     /**
@@ -131,17 +134,11 @@ class ExamsController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $exam = Exam::where('exam_id', $id);
-            $exam->delete();
+        $exam = Exam::where('id', $id);
+        $exam->delete();
 
-            return response()->json([
-                'deleted' => 'Exam was deleted'
-            ], 200);
-        }else{
-            return "dddd";
-        }
+        return response()->json([
+            'deleted' => 'Exam was deleted'
+        ], 200);
     }
 }

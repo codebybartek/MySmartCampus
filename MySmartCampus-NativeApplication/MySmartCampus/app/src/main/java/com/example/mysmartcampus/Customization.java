@@ -6,7 +6,6 @@ import com.example.mysmartcampus.Models.Exam;
 import com.example.mysmartcampus.Models.Group;
 import com.example.mysmartcampus.Models.Material;
 import com.example.mysmartcampus.Models.News;
-import com.example.mysmartcampus.Models.Professor;
 import com.example.mysmartcampus.Models.Student;
 import com.example.mysmartcampus.Models.Subject;
 import com.example.mysmartcampus.Models.User;
@@ -16,31 +15,34 @@ import java.util.ArrayList;
 
 public class Customization {
 
-    public static User user;
+    public static User user = null;
     public static ArrayList<Exam> exams = new ArrayList<>();
 
-    public static void initUser(){
-        ArrayList<Subject> subjects = new ArrayList<>();
-        user = new User("professor", "professor@gmail.com", "234DFfs@#","234DFfs","234DFfs", subjects);
-        addStudents();
+    public static void initUser(String name, String email, String mobileToken,String tagId, String photo, ArrayList<Subject> subjects){
+        user = new User(name, email, mobileToken, tagId, photo, subjects);
+
+        MainActivity.setDefaultView();
+        //addStudents();
+
+
 
     }
 
-    public static void addActivities(Course course){
-        Activity activity1 = new Activity("Activity1", "2019-07-02","12:20:00",200, 0);
-        Activity activity2 = new Activity("Activity2", "2019-07-01","14:20:00",200, 0);
-        Activity activity3 = new Activity("Activity3", "2019-07-03","13:20:00",200, 0);
-        Activity activity4 = new Activity("Activity4", "2019-06-02","10:20:00",200, 0);
-        Activity activity5 = new Activity("Activity5", "2019-07-02","12:20:00",200, 0);
-        Activity activity6 = new Activity("Activity6", "2019-07-01","14:20:00",200, 0);
-        Activity activity7 = new Activity("Activity7", "2019-07-03","13:20:00",200, 0);
-        Activity activity8 = new Activity("Activity8", "2019-06-02","10:20:00",200, 0);
-        Activity activity14 = new Activity("Activit9", "2019-07-01","14:20:00",200, 0);
-        Activity activity9 = new Activity("Activity10", "2019-07-03","13:20:00",200, 0);
-        Activity activity10 = new Activity("Activity11", "2019-06-02","10:20:00",200, 0);
-        Activity activity11 = new Activity("Activity12", "2019-07-01","14:20:00",200, 0);
-        Activity activity12 = new Activity("Activity13", "2019-07-03","13:20:00",200, 0);
-        Activity activity13 = new Activity("Activity14", "2019-06-02","10:20:00",200, 0);
+    /*public static void addActivities(Course course){
+        Activity activity1 = new Activity(1, "Activity1", "2019-07-02","12:20:00",200, 0);
+        Activity activity2 = new Activity(2,"Activity2", "2019-07-01","14:20:00",200, 0);
+        Activity activity3 = new Activity(3,"Activity3", "2019-07-03","13:20:00",200, 0);
+        Activity activity4 = new Activity(4, "Activity4", "2019-06-02","10:20:00",200, 0);
+        Activity activity5 = new Activity(5,"Activity5", "2019-07-02","12:20:00",200, 0);
+        Activity activity6 = new Activity(6,"Activity6", "2019-07-01","14:20:00",200, 0);
+        Activity activity7 = new Activity(7,"Activity7", "2019-07-03","13:20:00",200, 0);
+        Activity activity8 = new Activity(8,"Activity8", "2019-06-02","10:20:00",200, 0);
+        Activity activity14 = new Activity(9,"Activit9", "2019-07-01","14:20:00",200, 0);
+        Activity activity9 = new Activity(10,"Activity10", "2019-07-03","13:20:00",200, 0);
+        Activity activity10 = new Activity(11,"Activity11", "2019-06-02","10:20:00",200, 0);
+        Activity activity11 = new Activity(12,"Activity12", "2019-07-01","14:20:00",200, 0);
+        Activity activity12 = new Activity(13,"Activity13", "2019-07-03","13:20:00",200, 0);
+        Activity activity13 = new Activity(14,"Activity14", "2019-06-02","10:20:00",200, 0);
 
         ArrayList<Activity> activities = new ArrayList<>();
         activities.add(activity1);
@@ -155,7 +157,7 @@ public class Customization {
         Group group = new Group("17A", students);
         Course course55 = new Course("Course25", group);
         Course course56 = new Course("Course26", group);
-        Activity activity1 = new Activity("Activity1222", "2019-07-02","12:20:00",200, 0);
+        Activity activity1 = new Activity(15, "Activity1222", "2019-07-02","12:20:00",200, 0);
         Material material2 = new Material("Material2", "2019-07-01","https://achilles.tu.kielce.pl/portal/Members/9487853b374349e88094142d8428c1f9/2018-2019-semestr-letni/systemy-odporne-na-bledy/laboratorium/systemy-odporne-na-bledy.pdf/@@download/file/Systemy odporne na błędy.pdf");
         News news1 = new News("News1", "2019-07-02","Info asd as sad sd asd asd asd asdas sa asd asd sad asd sadsd adsa sad asds dasd assd sadsa sad sad asd sd asd asdasasdsaasd asd as","https://i.imgur.com/DvpvklR.png");
         course56.addActivity(activity1);
@@ -168,5 +170,5 @@ public class Customization {
         user.addSubject(subject);
         user.addSubject(subject2);
 
-    }
+    }*/
 }

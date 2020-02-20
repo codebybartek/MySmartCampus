@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
-            <LinearLayout
+       <!--     <LinearLayout
                 android:id="@+id/exam_header_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_centerInParent="true"
                 android:text="All exams >"
                 android:layout_below="@id/examsList"
-                android:textStyle="bold" />
+                android:textStyle="bold" />-->
 
             <LinearLayout
                 android:id="@+id/activity_header_list"
@@ -76,8 +76,9 @@
                 android:background="#0e0ed7"
                 android:orientation="horizontal"
                 android:layout_marginTop="30dp"
-                android:layout_below="@id/seeMoreExams"
                 android:weightSum="100">
+                <!--android:layout_below="@id/seeMoreExams"-->
+
 
                 <TextView
                     android:layout_width="match_parent"

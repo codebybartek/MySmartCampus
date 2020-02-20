@@ -86,12 +86,49 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="asdsadsadsa"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+
+            <!-- add default google sign in button
+            type of button size : icon_only, wide and standard -->
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/default_google_sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:buttonSize="wide" />
+
+            <!-- image view to show user profile image -->
+            <!--  <ImageView
+                  android:id="@+id/user_profile_image_view"
+                  android:layout_width="120dp"
+                  android:layout_height="120dp"
+                  android:layout_gravity="center_horizontal"
+                  android:layout_marginTop="20dp" />-->
+
+              <!-- text view to show user details -->
+            <!-- <TextView
+                 android:id="@+id/user_details_label"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:textColor="#000"
+                 android:textSize="15sp" />-->
+
+
+             <!-- custom google sign in button -->
+
+
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="38dp"
                 android:background="@drawable/simple_button"
                 android:backgroundTint="@color/colorAccent"
                 android:layout_gravity="center_horizontal"

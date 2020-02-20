@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\News;
 use App\User;
+use App\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -23,7 +24,19 @@ class NewsController extends Controller
     {
         $AuthUser = Auth::user();
         $user = User::all()->where('id', $AuthUser->id)->first();
-        $courses = $user->courses;
+        
+         if($user->roles->first()->name == "professor"){
+            $courses = $user->courses;
+        }else{
+            $courses = [];
+            $groupId = DB::table('group_user')->where('user_id', $user->id)->pluck('group_id')->first();
+            $coursesTemp = Course::all()->where('group_id', $groupId);
+            $i = 0;
+            foreach ($coursesTemp as $key => $value) {
+                $courses[$i] = $value;
+                $i++;
+            }
+        }
 
         $newsAll = [];
         $w = 0;
@@ -66,12 +79,12 @@ class NewsController extends Controller
 
         $image_resize = Image::make($image->getRealPath());
         $image_resize->resize(400, 400);
-        $image_resize->save(public_path('images/' .$imageName));
+        $image_resize->save('images/news/'.$imageName);
 
         $news = new News();
         $news->title = $request->title;
         $news->content = $request->body;
-        $news->img_src = 'http://'.request()->getHost().':8000/images/'.$imageName;
+        $news->img_src = 'http://'.request()->getHost().'/images/news/'.$imageName;
         $news->news_date = date('Y-m-d H:i:s');
         $news->hash = md5(time()).rand(0, 999);
 
@@ -108,14 +121,7 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $news = News::all()->where('news_id', $id)->first();
-            return $news;
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -127,24 +133,7 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $news = News::where('news_id', $id)->first();
-            $news->title = $request->title;
-            $news->content = $request->contentt;
-            $news->news_date = $request->news_date;
-            $news->duration = $request->duration;
-            $news->img_src = $request->img_src;
-            $news->course_id = $request->course_id;
-            $news->save();
-
-            return response()->json([
-                'updated' => 'News was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+       //
     }
 
     /**

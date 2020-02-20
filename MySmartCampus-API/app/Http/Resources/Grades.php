@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\User;
+use App\Exam;
 
 class Grades extends JsonResource
 {
@@ -14,6 +16,17 @@ class Grades extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+
+        $user = User::all()->where('id', $this->user_id)->first();
+        $exam_title = Exam::all()->where('id', $this->exam_id)->pluck('title')->first();
+
+         return [
+            'id' => $this->id,
+            'grade_date' => $this->grade_date,
+            'hash' => $this->hash,
+            'grade' => $this->grade,
+            'user' => $user,
+            'exam_title' => $exam_title
+        ];
     }
 }

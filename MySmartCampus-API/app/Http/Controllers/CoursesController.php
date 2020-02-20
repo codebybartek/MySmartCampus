@@ -23,7 +23,15 @@ class CoursesController extends Controller
         $AuthUser = Auth::user();
         $user = User::all()->where('id', $AuthUser->id)->first();
 
-        return CoursesResource::collection($user->courses);
+        $user = Auth::user();
+        if($user->roles->first()->name == "professor"){
+            $courses = $user->courses;
+        }else{
+            $courses = [];
+            $groupId = DB::table('group_user')->where('user_id', $user->id)->pluck('group_id')->first();
+            $courses = Course::all()->where('group_id', $groupId);
+        }
+        return CoursesResource::collection($courses);
     }
 
     /**
@@ -83,14 +91,7 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Course::all()->where('course_id', $id)->first();
-            return $course;
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -102,21 +103,14 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Course::where('course_id', $id)->first();
-            $course->name = $request->name;
-            $course->group_id = $request->group_id;
-            $course->subject_id = $request->subject_id;
-            $course->save();
+        $course = Course::where('id', $id)->first();
+        $course->name = $request->name;
+        $course->group_id = $request->group_id;
+        $course->save();
 
-            return response()->json([
-                'updated' => 'Course was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        return response()->json([
+            'updated' => 'Course was updated'
+        ], 201);
     }
     /**
      * Remove the specified resource from storage.

@@ -5,32 +5,36 @@ import java.util.Date;
 
 public class Exam{
 
+    private Integer id;
     private String examtitle;
-    private String examDate;
-    private char examGrade;
-    private Student student;
+    private String hash;
+    private ArrayList<Grade> grades = new ArrayList<>();
 
-    public Exam(String examtitle, String examDate, char examGrade, Student student) {
+    public Exam(Integer id, String examtitle, String hash, ArrayList<Grade> grades) {
+        this.id = id;
         this.examtitle = examtitle;
-        this.examDate = examDate;
-        this.examGrade = examGrade;
-        this.student = student;
+        this.hash = hash;
+        this.grades = grades;
+    }
+
+    public Integer getExamId() {
+        return id;
     }
 
     public String getExamTitle() {
         return examtitle;
     }
 
-    public String getExamDate() {
-        return examDate;
+    public String getExamHash() {
+        return hash;
     }
 
-    public int getExamGrade() {
-        return examGrade;
+    public ArrayList<Grade> getExamGrades() {
+        return grades;
     }
 
-    public Student getStudent() {
-        return student;
+    public void setExamGrades(ArrayList<Grade> grades) {
+        this.grades = grades;
     }
 
 }

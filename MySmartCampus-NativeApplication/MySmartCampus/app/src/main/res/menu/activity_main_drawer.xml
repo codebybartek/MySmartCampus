@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/exams"
+            android:icon="@drawable/grades"
+            android:title="Exams" />
+        <item
             android:id="@+id/subjects"
             android:icon="@drawable/subjects"
             android:title="Subjects" />
@@ -17,9 +21,9 @@
             android:icon="@drawable/activities"
             android:title="Activities" />
         <item
-            android:id="@+id/exams"
+            android:id="@+id/groups"
             android:icon="@drawable/grades"
-            android:title="Exams" />
+            android:title="Groups" />
         <item
             android:id="@+id/news"
             android:icon="@drawable/news"
@@ -30,13 +34,13 @@
             android:title="Materials" />
     </group>
 
-    <item android:title="">
+    <!--<item android:title="">
         <menu>
             <item
                 android:id="@+id/webpage"
                 android:icon="@drawable/webpage"
                 android:title="Share" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>

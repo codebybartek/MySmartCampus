@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {
-    protected $fillable = ['title', 'questions', 'exam_date', 'isQuiz', 'duration', 'hash'];
+    protected $fillable = ['title', 'hash'];
 
     public $primaryKey = 'id';
 

@@ -15,6 +15,7 @@ import com.github.barteksc.pdfviewer.PDFView;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -45,7 +46,7 @@ public class ReadPdf extends Fragment {
             InputStream inputStream = null;
             try{
                 URL url = new URL(strings[0]);
-                HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
                 if(urlConnection.getResponseCode() == 200)
                 {
                     inputStream = new BufferedInputStream(urlConnection.getInputStream());

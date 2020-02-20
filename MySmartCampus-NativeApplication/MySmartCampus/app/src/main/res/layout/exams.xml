@@ -13,78 +13,43 @@
             android:layout_marginLeft="15dp"
             android:background="@drawable/back_arrow"/>
 
-        <TextView
-            android:id="@+id/choseCourse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_centerHorizontal="true"
-            android:text="@string/chose_course"
-            android:textSize="20sp"
-            tools:ignore="MissingConstraints" />
-
-        <Spinner
-            android:id="@+id/spinnerExams"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/select_input"
-            android:backgroundTintMode="add"
-            android:layout_below="@id/choseCourse"
-            android:gravity="center_horizontal"
-            android:paddingLeft="15dp"
-            android:paddingTop="10dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="10dp"
-            android:spinnerMode="dropdown" />
-
-
         <LinearLayout
-            android:id="@+id/header_list"
+            android:id="@+id/exam_header_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#0e0ed7"
+            android:layout_below="@id/backBtn"
             android:orientation="horizontal"
-            android:layout_marginTop="50dp"
-            android:layout_below="@id/spinnerExams"
+            android:layout_marginTop="20dp"
             android:weightSum="100">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="33.3"
+                android:layout_weight="50"
                 android:gravity="center"
-                android:text="Exam title:"
+                android:text="Exam id:"
                 android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_below="@+id/date"
-                android:layout_weight="33.3"
+                android:layout_weight="50"
                 android:gravity="center"
-                android:text="Exam date: "
+                android:text="Exam title: "
                 android:textColor="@color/colorPrimary" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="33.3"
-                android:gravity="center"
-                android:text="Grade/Student index"
-                android:textColor="@color/colorPrimary" />
         </LinearLayout>
 
         <LinearLayout android:id="@+id/examsList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/header_list"
+            android:layout_height="match_parent"
+            android:layout_below="@id/exam_header_list"
             android:weightSum="100">
             <ListView
-                android:id="@+id/listView"
+                android:id="@+id/listViewExams"
                 android:layout_width="match_parent"
-                android:layout_height="460dp"
+                android:layout_height="600dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 tools:ignore="MissingConstraints" />

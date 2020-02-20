@@ -47,7 +47,7 @@ public class Activities extends Fragment {
     ArrayList<Course> courses = new ArrayList<>();
     int courseSelected = -1;
     static Course course = null;
-    static Activity activity;
+    public static Activity activity = null;
 
     private Spinner spinner;
 

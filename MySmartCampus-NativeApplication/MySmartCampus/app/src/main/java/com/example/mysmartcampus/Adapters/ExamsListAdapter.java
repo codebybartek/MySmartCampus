@@ -19,7 +19,7 @@ import java.util.Date;
 
 public class ExamsListAdapter extends ArrayAdapter<Exam> {
 
-    private static final String TAG = "GradesListAdapter";
+    private static final String TAG = "ExamsListAdapter";
 
     private Context mContext;
     private int mResource;
@@ -35,22 +35,16 @@ public class ExamsListAdapter extends ArrayAdapter<Exam> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String examTitle = getItem(position).getExamTitle();
-        int examGrade = getItem(position).getExamGrade();
-        String examDate = getItem(position).getExamDate();
-        Student student = getItem(position).getStudent();
+        int examId = getItem(position).getExamId();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
 
         TextView title = (TextView) convertView.findViewById(R.id.examTitle);
-        TextView grade = (TextView) convertView.findViewById(R.id.grade);
-        TextView date = (TextView) convertView.findViewById(R.id.examDate);
-        TextView index = (TextView) convertView.findViewById(R.id.index);
+        TextView index = (TextView) convertView.findViewById(R.id.examId);
 
         title.setText(examTitle);
-        grade.setText(String.valueOf(examGrade));
-        date.setText(examDate);
-        index.setText(student.getIndex());
+        index.setText(String.valueOf(examId));
 
 
 

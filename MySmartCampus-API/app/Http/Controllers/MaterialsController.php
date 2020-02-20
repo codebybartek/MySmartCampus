@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Material;
 use App\User;
+use App\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,20 @@ class MaterialsController extends Controller
     {
         $AuthUser = Auth::user();
         $user = User::all()->where('id', $AuthUser->id)->first();
-        $courses = $user->courses;
+
+        if($user->roles->first()->name == "professor"){
+            $courses = $user->courses;
+            
+        }else{
+            $courses = [];
+            $groupId = DB::table('group_user')->where('user_id', $user->id)->pluck('group_id')->first();
+            $coursesTemp = Course::all()->where('group_id', $groupId);
+            $i = 0;
+            foreach ($coursesTemp as $key => $value) {
+                $courses[$i] = $value;
+                $i++;
+            }
+        }
 
         $courses = collect($courses);
 
@@ -52,7 +66,7 @@ class MaterialsController extends Controller
         $material = new Material();
         $material->title = $request->title;
         $material->content = $request->body;
-        $material->attachment_url = 'http://'.request()->getHost().':8000/images/'.$attachmentName;
+        $material->attachment_url = 'http://'.request()->getHost().'/materials/'.$attachmentName;
         $material->material_date = date('Y-m-d H:i:s');
         $material->hash = md5(time()).rand(0, 999);
 
@@ -89,14 +103,7 @@ class MaterialsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $material = Material::all()->where('material_id', $id)->first();
-            return $material;
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -108,23 +115,7 @@ class MaterialsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $material = Material::where('material_id', $id)->first();
-            $material->title = $request->title;
-            $material->content = $request->contentt;
-            $material->material_date = $request->material_date;
-            $material->attachment_url = $request->attachment_url;
-            $material->course_id = $request->course_id;
-            $material->save();
-
-            return response()->json([
-                'updated' => 'Material was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+       
     }
 
     /**

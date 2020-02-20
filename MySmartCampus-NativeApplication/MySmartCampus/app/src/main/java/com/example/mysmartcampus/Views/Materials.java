@@ -1,6 +1,5 @@
 package com.example.mysmartcampus.Views;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,11 +17,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mysmartcampus.Adapters.ExamsListAdapter;
 import com.example.mysmartcampus.Adapters.MaterialsListAdapter;
 import com.example.mysmartcampus.Customization;
 import com.example.mysmartcampus.Models.Course;
-import com.example.mysmartcampus.Models.Exam;
 import com.example.mysmartcampus.Models.Material;
 import com.example.mysmartcampus.Models.Subject;
 import com.example.mysmartcampus.R;
@@ -40,7 +37,7 @@ public class Materials extends Fragment {
     MaterialsListAdapter adapterList;
     ListView mListView;
     ArrayList<Material> materialsSelected = new ArrayList<>();
-    ArrayList<Course> courses = new ArrayList<>();
+    public static ArrayList<Course> courses = new ArrayList<>();
     public static Material material;
     public static int courseSelected;
 

@@ -5,17 +5,17 @@ import java.util.Date;
 public class News {
     private String title;
     private String newsDate;
-    private String info;
+    private String content;
     private String newsPicture;
 
-    public News(String title, String newsDate, String info, String newsPicture) {
+    public News(String title, String newsDate, String content, String newsPicture) {
         this.title = title;
         this.newsDate = newsDate;
-        this.info = info;
+        this.content = content;
         this.newsPicture = newsPicture;
     }
 
-    public String getTitle() {
+    public String getNewsTitle() {
         return title;
     }
 
@@ -23,8 +23,8 @@ public class News {
         return newsDate;
     }
 
-    public String getInfo() {
-        return info;
+    public String getNewsContent() {
+        return content;
     }
 
     public String getNewsPicture() {

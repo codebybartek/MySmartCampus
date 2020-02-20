@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Student;
+use App\User;
+use App\Course;
+use App\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\Grades as GradesResources;
 
 class StudentsController extends Controller
 {
@@ -15,7 +19,11 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        return Student::all();
+        //return Student::all();
+        $AuthUser = Auth::user();
+        $grades = Grade::all()->where('user_id', $AuthUser->id);
+
+        return GradesResources::collection($grades);
     }
 
     /**
@@ -36,17 +44,22 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            Student::create($request->all());
+        DB::table('group_user')->insert(
+            ['user_id' => $request->user_id, 'group_id' => $request->group_id]
+        );
 
-            return response()->json([
-                'created' => 'Student was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $courseId = Course::all()->where('group_id', $request->group_id)->pluck('id')->first();
+        $subjectId = DB::table('course_user')->where('course_id', $courseId)->pluck('subject_id')->first();
+
+        DB::table('course_user')->insert(
+            ['user_id' => $request->user_id, 'course_id' => $courseId, 'subject_id' => $subjectId]
+        );
+
+        DB::table('buffors')->where('student_id', $request->user_id)->delete();
+
+        return response()->json([
+            'created' => 'Student was added'
+        ], 201);
     }
 
     /**
@@ -57,13 +70,7 @@ class StudentsController extends Controller
      */
     public function show($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            return Student::all()->where('student_id', $id)->first();
-        }else{
-            return "unauthorized";
-        }
+       
     }
 
     /**
@@ -74,14 +81,7 @@ class StudentsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $student = Student::all()->where('student_id', $id);
-            return $student;
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -93,41 +93,23 @@ class StudentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $student = Student::all()->where('student_id', $id)->first();
-            $student->name = $request->name;
-            $student->email = $request->email;
-            $student->tagId = $request->tagId;
-            $student->save();
-
-            return response()->json([
-                'updated' => 'Student was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $student = Student::where('student_id', $id);
-            $student->delete();
+       $jsonArray = json_decode($request->id,true);
+       $user = DB::table('group_user')->where([['user_id', '=', $jsonArray['student_id']],['group_id', '=', $jsonArray['group_id']]]);
+       $user->delete();
 
-            return response()->json([
-                'deleted' => 'Student was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";        }
+       return response()->json([
+            'deleted' => 'Student was removed from a group'
+        ], 200);
     }
 }

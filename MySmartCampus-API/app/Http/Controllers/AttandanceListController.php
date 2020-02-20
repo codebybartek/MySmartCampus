@@ -9,8 +9,9 @@ use App\Subject;
 use Illuminate\Http\Request;
 use App\Activity;
 use App\Course;
-use App\StudentsGroup;
+use App\Group;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AttandanceListController extends Controller
 {
@@ -64,35 +65,41 @@ class AttandanceListController extends Controller
      */
     public function show($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $course = Course::all()->where('course_id', $id)->first();
-            $studentsGroup = StudentsGroup::all()->where('group_id', $course->group_id);
-            $students = StudentsGroupsResource::collection($studentsGroup);
+
+        $course = Course::all()->where('id', $id)->first();
+        $users = Group::all()->where('id', $course->group_id)->first()->users;
 
 
-            $ids= array();
-            $i = 0;
-            foreach($students as $student){
-                $activitiesStudent = AttendanceList::all()->where('student_id', $student->student_id)->pluck('activity_id');
-                $activities = Activity::all()->where('course_id', $id)->pluck('activity_id')->toArray();
+        $data = array();
+        $i = 0;
+        $w = 0;
+
+        $activities = $course->activities->pluck('id')->toArray();
+        $activitiesAmount = count($activities);
+
+        foreach($users as $user){
+            if($user->role->first()->name != "professor"){
+                $w++;
+                $activitiesStudent = AttendanceList::all()->where('user_id', $user->id)->pluck('activity_id');
                 $activitiesWithStudent = 0;
                 for($i=0; $i<count($activitiesStudent); $i++){
                     if(in_array($activitiesStudent[$i], $activities)){
                         $activitiesWithStudent++;
                     }
                 }
-                $activities = count($activities);
 
-                $attandanceStudent = $activitiesWithStudent/$activities;
-                $ids[ $student->student_id]['student'] = $student;
-                $ids[ $student->student_id]['total'] = $attandanceStudent;
+                $attandanceStudent = $activitiesWithStudent/$activitiesAmount;
+                $ids['student'] = $user;
+                $ids['total'] = $attandanceStudent;
+                array_push($data, $ids);
                 $i++;
             }
-            return $ids;
         }
-        return "unauthorized";
+
+
+        
+        return ['data' => $data];
+       
     }
 
     /**
@@ -121,20 +128,18 @@ class AttandanceListController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $attandance = AttendanceList::where('student_id', $id);
-            $attandance->delete();
 
-            return response()->json([
-                'deleted' => 'Student was deleted'
-            ], 200);
-        }
+       $jsonArray = json_decode($request->id,true);
+       $user = DB::table('attendance_lists')->where([['user_id', '=', $jsonArray['student_id']],['activity_id', '=', $jsonArray['activity_id']]]);
+       $user->delete();
+
+       return response()->json([
+            'deleted' => "Student was deleted"
+        ], 200);
     }
 }

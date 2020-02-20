@@ -3,21 +3,30 @@ package com.example.mysmartcampus.Models;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Activity extends ArrayList<Activity> {
+public class Activity{
 
+    private Integer id;
     private String title;
     private String activityDate;
     private String hour;
+    private String hash;
     private int duration;
     private int checked;
     private ArrayList<Student> studentsPresence = new ArrayList<>();
+    private ArrayList<Student> students = new ArrayList<>();
 
-    public Activity(String title, String activityDate, String hour, int duration, int checked) {
+    public Activity(Integer id, String title, String activityDate, String hour, String hash, int duration, int checked) {
+        this.id = id;
         this.title = title;
         this.activityDate = activityDate;
         this.hour = hour;
+        this.hash = hash;
         this.duration = duration;
         this.checked = checked;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -30,6 +39,10 @@ public class Activity extends ArrayList<Activity> {
 
     public String getHour() {
         return hour;
+    }
+
+    public String getHash() {
+        return hash;
     }
 
     public int getDuration() {
@@ -48,8 +61,16 @@ public class Activity extends ArrayList<Activity> {
         return studentsPresence;
     }
 
+    public ArrayList<Student> getStudents() {
+        return students;
+    }
+
     public void setStudentsPresence(ArrayList<Student> studentsPresence) {
         this.studentsPresence = studentsPresence;
+    }
+
+    public void setStudents(ArrayList<Student> students) {
+        this.students = students;
     }
 
 }

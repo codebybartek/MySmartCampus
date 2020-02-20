@@ -33,9 +33,9 @@ public class NewsListAdapter extends ArrayAdapter<com.example.mysmartcampus.Mode
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        String newsTitle = getItem(position).getTitle();
+        String newsTitle = getItem(position).getNewsTitle();
         String newsDate = getItem(position).getNewsDate();
-        String newsInfo = getItem(position).getInfo();
+        String newsInfo = getItem(position).getNewsContent();
         String newsPicture = getItem(position).getNewsPicture();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Professor;
+use App\User;
 use App\Http\Resources\Professor as ProfessorsResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProfessorsAdminController extends Controller
 {
@@ -17,14 +18,18 @@ class ProfessorsAdminController extends Controller
      */
     public function index()
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $professor = Professor::all();
-            return $professor;
-        }else{
-            return "unauthorized";
+
+        $professorsId = DB::table('role_user')->where('role_id', 2)->pluck('user_id');
+
+        $professors = [];
+        for($i = 0; $i < count($professorsId); $i++){
+            $professor = User::all()->where('id', $professorsId[$i])->first();
+            $professors[$i]['professor_id'] = $professor->id;
+            $professors[$i]['professor_name'] = $professor->name;
         }
+
+        return ['data' => $professors];
+         
     }
 
     /**
@@ -45,18 +50,7 @@ class ProfessorsAdminController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $request['password'] = bcrypt($request->password);
-            Professor::create($request->all());
-
-            return response()->json([
-                'created' => 'Professor was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -79,14 +73,7 @@ class ProfessorsAdminController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $professor = Professor::all()->where('id', $id)->first();
-            return $professor;
-        }else {
-            return "unauthorized";
-        }
+       //
     }
 
     /**
@@ -98,25 +85,7 @@ class ProfessorsAdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $professor = Professor::all()->where('id', $id)->first();
-            $password = Professor::all()->where('id', $id)->pluck('password');
-            $professor->name = $request->name;
-            $professor->email = $request->email;
-            $professor->tagId = $request->tagId;
-            if ($request->password != "") {
-                $professor->password = bcrypt($request->password);
-            }
-            $professor->save();
-
-            return response()->json([
-                'updated' => 'Professor was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 
     /**
@@ -127,17 +96,6 @@ class ProfessorsAdminController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if($isAdmin) {
-            $professor = Professor::where('id', $id);
-            $professor->delete();
-
-            return response()->json([
-                'deleted' => 'Professor was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        //
     }
 }

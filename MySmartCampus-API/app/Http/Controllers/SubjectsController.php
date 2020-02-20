@@ -82,14 +82,7 @@ class SubjectsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $subject = Subject::all()->where('subject_id', $id);
-            return $subject;
-        }else{
-            return "unauthorized";
-        }
+        
     }
 
     /**
@@ -101,18 +94,12 @@ class SubjectsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $subject = Subject::where('subject_id', $id)->first();
-            $subject->name = $request->name;
-            $subject->save();
-            return response()->json([
-                'updated' => 'Subject was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $subject = Subject::where('id', $id)->first();
+        $subject->name = $request->name;
+        $subject->save();
+        return response()->json([
+            'updated' => 'Subject was updated'
+        ], 201);
     }
 
     /**

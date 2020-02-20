@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Group;
-use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\Groups as GroupsResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GroupsController extends Controller
 {
@@ -17,9 +17,14 @@ class GroupsController extends Controller
      */
     public function index()
     {
-        $AuthUser = Auth::user();
-        $user = User::all()->where('id', $AuthUser->id)->first();
-        $groups= $user->groups;
+        $user = Auth::user();
+
+        
+        if($user->roles->first()->name == "professor"){
+            $groups= $user->groups;
+        }else{
+            $groups= Group::all();
+        }
 
         return GroupsResource::collection($groups);
     }
@@ -42,26 +47,45 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            Group::create($request->all());
 
-            return response()->json([
-                'created' => 'Group was added'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        $user = Auth::user();
+
+        $group = new Group();
+        $group->name = $request->name;
+        $group->hash = md5(time()).rand(0, 999);
+
+        Group::create($group->toArray());
+
+        $groupId = Group::all()->where('hash', $group->hash)->pluck('id')->first();
+
+        DB::table('group_user')->insert(
+            ['user_id' => $user->id, 'group_id' => $groupId]
+        );
+
+        return response()->json([
+            'created' => 'Group was added'
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  String  $hash
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($hash)
+    {
+        $groups = Group::all()->where('hash', $hash);
+        return GroupsResource::collection($groups);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithId($id)
     {
         $groups = Group::all()->where('id', $id);
         return GroupsResource::collection($groups);
@@ -75,14 +99,7 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $group = Group::all()->where('group_id', $id);
-            return $group;
-        }else{
-            return "unauthorized";
-        }
+        
     }
 
     /**
@@ -94,19 +111,7 @@ class GroupsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $group = Group::where('group_id', $id)->first();
-            $group->name = $request->name;
-            $group->save();
-
-            return response()->json([
-                'updated' => 'Group was updated'
-            ], 201);
-        }else{
-            return "unauthorized";
-        }
+        
     }
 
     /**
@@ -117,17 +122,11 @@ class GroupsController extends Controller
      */
     public function destroy($id)
     {
-        $professor = Auth::user();
-        $isAdmin = $professor->isAdmin;
-        if(!$isAdmin) {
-            $group = Group::where('group_id', $id);
-            $group->delete();
+        $group = Group::where('id', $id);
+        $group->delete();
 
-            return response()->json([
-                'deleted' => 'Group was deleted'
-            ], 200);
-        }else{
-            return "unauthorized";
-        }
+        return response()->json([
+            'deleted' => 'Group was deleted'
+        ], 200);
     }
 }

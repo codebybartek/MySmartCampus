@@ -75,7 +75,8 @@ public class Courses extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position != 0) {
-                        courses = Customization.user.getSubjects().get(position - 1).getCourses();
+                        //courses = Customization.user.getSubjects().get(position - 1).getCourses();
+                        courses = Main.courses;
                         ShowList(courses);
                     }
                 }
